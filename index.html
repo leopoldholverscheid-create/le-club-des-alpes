@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#09090b" />
   <meta name="robots" content="noindex, nofollow" />
   <title>Le Club des Alpes — L’Anniversaire de Leopold</title>
+  <meta name="description" content="Leopold’s 30th Birthday Celebration — Edition Après Ski. Private invitation." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -92,28 +93,17 @@ import {
   useAnimationControls,
 } from 'framer-motion';
 import { createClient } from '@supabase/supabase-js';
-import { ArrowRight, CalendarPlus, Check, Copy, Loader2 } from 'lucide-react';
+import { ArrowRight, CalendarPlus, Check, Copy, Download, Loader2 } from 'lucide-react';
 
 /* ───────────────────────────── Supabase client ───────────────────────────── */
 
-// Paste your values from Supabase → Project Settings → API.
-// The anon key is public by design; the RLS policy above only allows inserts.
+// Publishable (public) key — safe in the browser as long as RLS only allows inserts.
 const SUPABASE_URL = 'https://eouhnvputjmjmqfoinjj.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_hLcy5p1kuVoOYAfRYpp__g_Jow7G7nw';
 
-const supabase =
-  SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('YOUR-PROJECT')
-    ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-    : null;
-
-if (!supabase) {
-  console.warn(
-    '[Le Club des Alpes] SUPABASE_URL / SUPABASE_ANON_KEY not set — RSVPs cannot be saved.'
-  );
-}
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 async function saveRsvp(guestName, status) {
-  if (!supabase) throw new Error('Supabase is not configured.');
   const { error } = await supabase
     .from('rsvps')
     .insert({ guest_name: guestName, status });
@@ -133,23 +123,14 @@ const MAPS_URL = 'https://maps.app.goo.gl/ALpBfsoryntMojt27';
 const IBAN = 'DE44 6905 0001 0020 1306 21';
 /* ─────────────────────────────── Calendar ────────────────────────────────── */
 
-// 18:00 CET = 17:00 UTC. "Open End" is entered as 02:00 so the entry has a visible length.
+// Berlin is on CET (UTC+1) in December:
+// 12 Dec 2026, 18:00 local = 17:00 UTC  ·  13 Dec 2026, 03:00 local = 02:00 UTC
 const EVENT = {
-  title: 'anniversaire leopold',
-  startUtc: '20261212T170000Z', // Sat 12 Dec 2026, 18:00 (Europe/Berlin)
-  endUtc: '20261213T010000Z', //   Sun 13 Dec 2026, 02:00 (Europe/Berlin)
-  location: 'The Shelter (TC Kluftern), Sportplatzstraße, 88048 Friedrichshafen-Kluftern, Germany',
-  description: [
-    'Le Club des Alpes — L’Anniversaire de Leopold. Vol. 30, Private Gathering.',
-    '30 Years. One Alpine Night.',
-    '',
-    'December 12, 2026 — 18:00 Hours till Late (Open End).',
-    '',
-    'DRESS CODE: Alpine Elegance. Cashmere, Heavy Knits, Shearling.',
-    'Dress for the mountains, not the valley. Functional warmth is a mandatory part of the aesthetic.',
-    '',
-    `Location: ${MAPS_URL}`,
-  ].join('\n'),
+  title: 'Le Club des Alpes — L’Anniversaire de Leopold',
+  startUtc: '20261212T170000Z',
+  endUtc: '20261213T020000Z',
+  location: 'TC Kluftern, Ganghoferstraße 9, 88048 Friedrichshafen',
+  description: 'Après Ski Edition. Dresscode: Alpine Elegance.',
 };
 
 const icsEscape = (text) =>
@@ -213,22 +194,13 @@ const GOOGLE_CALENDAR_URL =
     details: EVENT.description,
   }).toString();
 
-const IS_IOS =
-  /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
+// Blob download — Apple Calendar, Outlook, iOS Safari (13+) and Android all accept it.
 function downloadIcs() {
   const ics = buildIcs();
-  // iOS: opening the calendar data directly shows the native "Add to Calendar" sheet.
-  if (IS_IOS) {
-    window.location.href = `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
-    return;
-  }
-  // Desktop & Android: regular file download (opens in Outlook / Apple Calendar / etc.).
   const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'anniversaire-leopold.ics';
+  link.download = 'le-club-des-alpes-anniversaire-leopold.ics';
   document.body.appendChild(link);
   link.click();
   link.remove();
@@ -365,6 +337,9 @@ function NameGate({ onUnlock }) {
         <p className="mt-2 font-display text-xl italic text-zinc-300">
           L’Anniversaire de Leopold
         </p>
+        <p className="mt-3 font-body text-[9px] font-medium uppercase tracking-[0.35em] text-[#b9a47f]">
+          EDITION APRÈS SKI
+        </p>
       </motion.div>
 
       <form onSubmit={handleSubmit} noValidate className="w-full">
@@ -449,7 +424,7 @@ function TopBar() {
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
       <div className="flex h-12 items-center justify-between gap-4 whitespace-nowrap px-5 font-body text-[9px] font-medium uppercase tracking-[0.14em] min-[400px]:tracking-[0.24em]">
-        <span className="text-zinc-300">LE CLUB DES ALPES</span>
+        <span className="text-zinc-300">LE CLUB DES ALPES <span className="text-zinc-600">· XXX</span></span>
         <span className="flex items-center gap-2 text-zinc-500">
           <span className="relative hidden h-1.5 w-1.5 min-[400px]:flex">
             <span className="absolute inset-0 animate-ping rounded-full bg-[#c9b48f]/50" />
@@ -564,22 +539,23 @@ function RsvpPanel({ name }) {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.9, ease: EASE }}
                 >
-                  <button type="button" onClick={downloadIcs} className={PRIMARY_BUTTON}>
-                    <CalendarPlus className="h-4 w-4 shrink-0" strokeWidth={1.5} />
-                    <span>ADD TO CALENDAR</span>
-                  </button>
-                  <p className="mt-2 text-center font-body text-[10px] uppercase tracking-[0.24em] text-zinc-600">
-                    Apple Calendar · Outlook (.ics)
-                  </p>
                   <a
                     href={GOOGLE_CALENDAR_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-4 flex min-h-12 w-full items-center justify-center gap-3 border border-white/[0.14] px-5 font-body text-[11px] font-medium uppercase tracking-[0.16em] text-zinc-300 transition-[transform,border-color,color] duration-300 hover:border-white/30 hover:text-zinc-100 active:scale-95"
+                    className={PRIMARY_BUTTON}
                   >
-                    ADD TO GOOGLE CALENDAR
-                    <ArrowRight className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+                    <CalendarPlus className="h-4 w-4 shrink-0" strokeWidth={1.5} />
+                    <span>GOOGLE CALENDAR</span>
                   </a>
+                  <button
+                    type="button"
+                    onClick={downloadIcs}
+                    className="mt-3 flex min-h-14 w-full items-center justify-center gap-3 border border-white/[0.14] px-5 font-body text-[11px] font-medium uppercase tracking-[0.16em] text-zinc-300 transition-[transform,border-color,color] duration-300 hover:border-white/30 hover:text-zinc-100 active:scale-95"
+                  >
+                    <Download className="h-4 w-4 shrink-0" strokeWidth={1.5} />
+                    <span>APPLE / OUTLOOK (.ICS)</span>
+                  </button>
                 </motion.div>
               ) : (
                 <motion.button
@@ -700,17 +676,20 @@ function Manifest({ name }) {
 
         {/* Masthead */}
         <Reveal className="mt-14 border-y border-white/[0.07] py-10 text-center" delay={0.9}>
-          <h2 className="text-balance font-display text-[1.7rem] font-normal uppercase leading-tight tracking-[0.14em] text-zinc-200">
-            LE CLUB DES ALPES
-          </h2>
-          <p className="mt-3 font-display text-xl italic text-zinc-300">
-            L’Anniversaire de Leopold
-          </p>
-          <span aria-hidden="true" className="mx-auto mt-6 block h-px w-8 bg-[#c9b48f]/40" />
-          <p className="mt-6 flex items-center justify-center gap-3 font-body text-[10px] font-medium uppercase tracking-[0.32em] text-zinc-500">
+          <p className="flex items-center justify-center gap-3 font-body text-[10px] font-medium uppercase tracking-[0.32em] text-zinc-500">
             <span>VOL. 30</span>
             <span aria-hidden="true" className="h-1 w-1 rounded-full bg-[#c9b48f]/70" />
             <span>PRIVATE GATHERING</span>
+          </p>
+          <h2 className="mt-5 text-balance font-display text-[1.7rem] font-normal uppercase leading-tight tracking-[0.14em] text-zinc-200">
+            LE CLUB DES ALPES
+          </h2>
+          <p className="mt-3 text-balance font-display text-xl italic leading-snug text-zinc-300">
+            L’Anniversaire de Leopold — Edition Après Ski
+          </p>
+          <span aria-hidden="true" className="mx-auto mt-6 block h-px w-8 bg-[#c9b48f]/40" />
+          <p className="mt-6 font-body text-[10px] font-medium uppercase tracking-[0.2em] text-[#b9a47f] min-[400px]:tracking-[0.26em]">
+            Leopold’s 30th Birthday Celebration
           </p>
         </Reveal>
 
