@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#09090b" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>Le Club des Alpes</title>
+  <title>Le Club des Alpes — L’Anniversaire de Leopold</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -60,7 +60,7 @@
 
   <script type="text/babel" data-type="module" data-presets="react">
 /**
- * Le Club des Alpes — Private Invitation (Vol. 30)
+ * Le Club des Alpes — L’Anniversaire de Leopold (Vol. 30)
  * Single-file version: React · Tailwind CSS · Framer Motion · Supabase · lucide-react via CDN.
  *
  * ── Supabase SQL (run once in the SQL editor) ────────────────────────────────
@@ -92,14 +92,14 @@ import {
   useAnimationControls,
 } from 'framer-motion';
 import { createClient } from '@supabase/supabase-js';
-import { ArrowRight, Check, Copy, Loader2, Wallet } from 'lucide-react';
+import { ArrowRight, CalendarPlus, Check, Copy, Loader2 } from 'lucide-react';
 
 /* ───────────────────────────── Supabase client ───────────────────────────── */
 
 // Paste your values from Supabase → Project Settings → API.
 // The anon key is public by design; the RLS policy above only allows inserts.
-const SUPABASE_URL = 'https://eouhnvputjmjmqfoinjj.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_hLcy5p1kuVoOYAfRYpp__g_Jow7G7nw';
+const SUPABASE_URL = 'https://YOUR-PROJECT.supabase.co';
+const SUPABASE_ANON_KEY = 'YOUR-ANON-PUBLIC-KEY';
 
 const supabase =
   SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('YOUR-PROJECT')
@@ -131,7 +131,110 @@ const GUESTS = [
 
 const MAPS_URL = 'https://maps.app.goo.gl/ALpBfsoryntMojt27';
 const IBAN = 'DE44 6905 0001 0020 1306 21';
-const SUMMIT_PASS_URL = '#'; // TODO: replace with your .pkpass endpoint
+/* ─────────────────────────────── Calendar ────────────────────────────────── */
+
+// 18:00 CET = 17:00 UTC. "Open End" is entered as 02:00 so the entry has a visible length.
+const EVENT = {
+  title: 'anniversaire leopold',
+  startUtc: '20261212T170000Z', // Sat 12 Dec 2026, 18:00 (Europe/Berlin)
+  endUtc: '20261213T010000Z', //   Sun 13 Dec 2026, 02:00 (Europe/Berlin)
+  location: 'The Shelter (TC Kluftern), Sportplatzstraße, 88048 Friedrichshafen-Kluftern, Germany',
+  description: [
+    'Le Club des Alpes — L’Anniversaire de Leopold. Vol. 30, Private Gathering.',
+    '30 Years. One Alpine Night.',
+    '',
+    'December 12, 2026 — 18:00 Hours till Late (Open End).',
+    '',
+    'DRESS CODE: Alpine Elegance. Cashmere, Heavy Knits, Shearling.',
+    'Dress for the mountains, not the valley. Functional warmth is a mandatory part of the aesthetic.',
+    '',
+    `Location: ${MAPS_URL}`,
+  ].join('\n'),
+};
+
+const icsEscape = (text) =>
+  text.replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+
+// RFC 5545: lines longer than 75 bytes are folded with CRLF + one space.
+function icsFold(line) {
+  const bytes = new TextEncoder();
+  const parts = [];
+  let current = '';
+  for (const char of line) {
+    const limit = parts.length === 0 ? 75 : 74;
+    if (bytes.encode(current + char).length > limit) {
+      parts.push(current);
+      current = char;
+    } else {
+      current += char;
+    }
+  }
+  parts.push(current);
+  return parts.join('\r\n ');
+}
+
+function buildIcs() {
+  const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Le Club des Alpes//Invitation//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    'UID:le-club-des-alpes-vol30-20261212@club-des-alpes',
+    `DTSTAMP:${stamp}`,
+    `DTSTART:${EVENT.startUtc}`,
+    `DTEND:${EVENT.endUtc}`,
+    `SUMMARY:${icsEscape(EVENT.title)}`,
+    `LOCATION:${icsEscape(EVENT.location)}`,
+    `DESCRIPTION:${icsEscape(EVENT.description)}`,
+    `URL:${MAPS_URL}`,
+    'BEGIN:VALARM',
+    'ACTION:DISPLAY',
+    `DESCRIPTION:${icsEscape(EVENT.title)}`,
+    'TRIGGER:-P1D',
+    'END:VALARM',
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ]
+    .map(icsFold)
+    .join('\r\n');
+}
+
+const GOOGLE_CALENDAR_URL =
+  'https://calendar.google.com/calendar/render?' +
+  new URLSearchParams({
+    action: 'TEMPLATE',
+    text: EVENT.title,
+    dates: `${EVENT.startUtc}/${EVENT.endUtc}`,
+    ctz: 'Europe/Berlin',
+    location: EVENT.location,
+    details: EVENT.description,
+  }).toString();
+
+const IS_IOS =
+  /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+function downloadIcs() {
+  const ics = buildIcs();
+  // iOS: opening the calendar data directly shows the native "Add to Calendar" sheet.
+  if (IS_IOS) {
+    window.location.href = `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
+    return;
+  }
+  // Desktop & Android: regular file download (opens in Outlook / Apple Calendar / etc.).
+  const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'anniversaire-leopold.ics';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 const MIN_LOADING_MS = 1400; // keeps the spinner on screen long enough to feel deliberate
 
 const EASE = [0.22, 1, 0.36, 1]; // slow, cinematic ease-out
@@ -249,6 +352,20 @@ function NameGate({ onUnlock }) {
         transition={{ duration: 1.6, ease: EASE, delay: 0.3 }}
         style={{ originY: 0 }}
       />
+
+      <motion.div
+        className="mb-14 text-center"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.6, ease: EASE, delay: 0.4 }}
+      >
+        <p className="font-body text-[10px] font-medium uppercase tracking-[0.35em] text-zinc-400">
+          LE CLUB DES ALPES
+        </p>
+        <p className="mt-2 font-display text-xl italic text-zinc-300">
+          L’Anniversaire de Leopold
+        </p>
+      </motion.div>
 
       <form onSubmit={handleSubmit} noValidate className="w-full">
         <motion.label
@@ -441,20 +558,29 @@ function RsvpPanel({ name }) {
           >
             <AnimatePresence mode="wait" initial={false}>
               {phase === 'confirmed' ? (
-                <motion.a
-                  key="pass"
-                  href={SUMMIT_PASS_URL}
-                  onClick={(event) => {
-                    if (SUMMIT_PASS_URL === '#') event.preventDefault();
-                  }}
-                  className={PRIMARY_BUTTON}
+                <motion.div
+                  key="calendar"
                   initial={{ opacity: 0, scale: 0.98 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.9, ease: EASE }}
                 >
-                  <Wallet className="h-4 w-4 shrink-0" strokeWidth={1.5} />
-                  <span>ADD SUMMIT PASS TO APPLE WALLET (.PKPASS)</span>
-                </motion.a>
+                  <button type="button" onClick={downloadIcs} className={PRIMARY_BUTTON}>
+                    <CalendarPlus className="h-4 w-4 shrink-0" strokeWidth={1.5} />
+                    <span>ADD TO CALENDAR</span>
+                  </button>
+                  <p className="mt-2 text-center font-body text-[10px] uppercase tracking-[0.24em] text-zinc-600">
+                    Apple Calendar · Outlook (.ics)
+                  </p>
+                  <a
+                    href={GOOGLE_CALENDAR_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 flex min-h-12 w-full items-center justify-center gap-3 border border-white/[0.14] px-5 font-body text-[11px] font-medium uppercase tracking-[0.16em] text-zinc-300 transition-[transform,border-color,color] duration-300 hover:border-white/30 hover:text-zinc-100 active:scale-95"
+                  >
+                    ADD TO GOOGLE CALENDAR
+                    <ArrowRight className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+                  </a>
+                </motion.div>
               ) : (
                 <motion.button
                   key="confirm"
@@ -577,8 +703,14 @@ function Manifest({ name }) {
           <h2 className="text-balance font-display text-[1.7rem] font-normal uppercase leading-tight tracking-[0.14em] text-zinc-200">
             LE CLUB DES ALPES
           </h2>
-          <p className="mt-3 font-display text-lg italic text-zinc-400">
-            Vol. 30 — Private Gathering
+          <p className="mt-3 font-display text-xl italic text-zinc-300">
+            L’Anniversaire de Leopold
+          </p>
+          <span aria-hidden="true" className="mx-auto mt-6 block h-px w-8 bg-[#c9b48f]/40" />
+          <p className="mt-6 flex items-center justify-center gap-3 font-body text-[10px] font-medium uppercase tracking-[0.32em] text-zinc-500">
+            <span>VOL. 30</span>
+            <span aria-hidden="true" className="h-1 w-1 rounded-full bg-[#c9b48f]/70" />
+            <span>PRIVATE GATHERING</span>
           </p>
         </Reveal>
 
