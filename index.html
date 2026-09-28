@@ -326,6 +326,37 @@ function downloadIcs() {
 
 /* ──────────────────────────────── Helpers ────────────────────────────────── */
 
+// The Google Calendar apps (iPhone + Android) claim calendar.google.com links, open,
+// and on phones often drop the pre-filled event. So each platform gets its own route:
+//  · iPhone/iPad: www.google.com isn't claimed by the app → Safari opens Google's
+//    web editor with the event filled in (Google redirects to calendar.google.com).
+//  · Android (Chrome): hand the link explicitly to the Calendar app via an intent,
+//    with the web editor as fallback if the app isn't installed.
+//  · Desktop and everything else: unchanged.
+const UA = navigator.userAgent;
+const IS_IOS_DEVICE =
+  /iPad|iPhone|iPod/.test(UA) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const IS_ANDROID_DEVICE = /Android/i.test(UA);
+const IS_ANDROID_WEBVIEW = IS_ANDROID_DEVICE && /; wv\)/.test(UA);
+const GOOGLE_CALENDAR_WEB_URL = GOOGLE_CALENDAR_URL.replace(
+  'https://calendar.google.com/',
+  'https://www.google.com/'
+);
+
+function googleCalendarLink() {
+  if (IS_IOS_DEVICE) return { href: GOOGLE_CALENDAR_WEB_URL, newTab: true };
+  if (IS_ANDROID_DEVICE && !IS_ANDROID_WEBVIEW) {
+    return {
+      href:
+        `intent://${GOOGLE_CALENDAR_URL.slice('https://'.length)}` +
+        '#Intent;scheme=https;package=com.google.android.calendar;' +
+        `S.browser_fallback_url=${encodeURIComponent(GOOGLE_CALENDAR_WEB_URL)};end`,
+      newTab: false,
+    };
+  }
+  return { href: GOOGLE_CALENDAR_URL, newTab: true };
+}
+
 const MIN_LOADING_MS = 1200; // spinner stays long enough that the save feels real
 const RSVP_STORAGE_KEY = 'leo30-rsvp';
 const RSVP_DEADLINE = '15.11.2026';
@@ -873,12 +904,12 @@ function SkiPass({ name }) {
 }
 
 function CalendarButtons() {
+  const google = googleCalendarLink();
   return (
     <div className="grid gap-3">
       <a
-        href={GOOGLE_CALENDAR_URL}
-        target="_blank"
-        rel="noopener noreferrer"
+        href={google.href}
+        {...(google.newTab && { target: '_blank', rel: 'noopener noreferrer' })}
         className="chunky font-display flex min-h-14 items-center justify-center gap-3 bg-white px-4 text-base text-black"
       >
         <CalendarPlus className="h-5 w-5 shrink-0" strokeWidth={2.2} />
@@ -1544,8 +1575,8 @@ function PubQuiz() {
                     >
                       <p className="font-display text-lg leading-snug text-[var(--yellow)]">
                         {picked.correct
-                          ? 'Richtig! 🍹 Langsam, aber mit Stil.'
-                          : 'Leider falsch! Ich war auf Aperol Spritz Ski unterwegs – sehr langsam, aber mit Stil. 🍹'}
+                          ? 'Richtig! 🍊 Langsam, aber mit Stil.'
+                          : 'Leider falsch! Ich war auf Volvic Orange Ski unterwegs – sehr langsam, aber mit Stil. 🍊'}
                       </p>
                       <p className="font-body mt-2 text-sm text-white/70">
                         Die echten Fragen gibt’s am 12.12. – und die werden härter.
