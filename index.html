@@ -6,7 +6,18 @@
   <meta name="theme-color" content="#0d0221" />
   <meta name="robots" content="noindex, nofollow" />
   <title>Leopold wird 30 — Après-Ski Edition &amp; Pub Quiz</title>
-  <meta name="description" content="Leopolds 30. Geburtstag · 12.12.2026 ab 18:00 · TC Kluftern · Après-Ski Edition &amp; Pub Quiz." />
+  <meta name="description" content="12.12.2026 ab 18:00 · TC Kluftern · Après-Ski trifft Center Court. Du bist eingeladen!" />
+
+  <!-- Link preview (WhatsApp, iMessage, Telegram …) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://le-club-des-alpes.vercel.app/" />
+  <meta property="og:title" content="Leopold wird 30 🎿🎾 Après-Ski Edition &amp; Pub Quiz" />
+  <meta property="og:description" content="12.12.2026 ab 18:00 · TC Kluftern · Du bist eingeladen!" />
+  <meta property="og:image" content="https://le-club-des-alpes.vercel.app/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="de_DE" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -147,7 +158,8 @@
   <script type="text/babel" data-type="module" data-presets="react">
 /**
  * Leopold wird 30 — Après-Ski Edition & Pub Quiz
- * "90s Après-Ski Trash meets Hüttengaudi"
+ * "90s Après-Ski Trash meets Hüttengaudi" — Après-Ski trifft Center Court.
+ * Files next to this page: leo-1.jpg … leo-5.jpg (polaroids), og.jpg (link preview).
  * Single-file version: React · Tailwind CSS · Framer Motion · Supabase · lucide-react via CDN.
  *
  * ── Supabase SQL (run once in the SQL editor) ────────────────────────────────
@@ -226,11 +238,16 @@ const IBAN = 'DE44 6905 0001 0020 1306 21';
 // Berlin is on CET (UTC+1) in December:
 // 12 Dec 2026, 18:00 local = 17:00 UTC  ·  13 Dec 2026, 03:00 local = 02:00 UTC
 const EVENT = {
-  title: 'Le Club des Alpes — L’Anniversaire de Leopold',
+  title: 'Leopold wird 30 – Après-Ski im TC Kluftern',
   startUtc: '20261212T170000Z',
   endUtc: '20261213T020000Z',
   location: 'TC Kluftern, Ganghoferstraße 9, 88048 Friedrichshafen',
-  description: 'Après Ski Edition. Dresscode: Alpine Elegance.',
+  description: [
+    'Après-Ski Edition & Pub Quiz – ich freu mich auf dich!',
+    'Dresscode: Alpine Elegance. Zieh dich warm an, im Clubheim ist es kalt.',
+    'Parkplätze gibt es genug.',
+    'Einladung: https://le-club-des-alpes.vercel.app',
+  ].join('\n'),
 };
 
 const icsEscape = (text) =>
@@ -311,11 +328,10 @@ function downloadIcs() {
 
 const MIN_LOADING_MS = 1200; // spinner stays long enough that the save feels real
 const RSVP_STORAGE_KEY = 'leo30-rsvp';
-const INTRO_STORAGE_KEY = 'leo30-intro-seen';
+const RSVP_DEADLINE = '15.11.2026';
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const toDisplayName = (key) => key.charAt(0).toUpperCase() + key.slice(1);
-const pick = (list) => list[Math.floor(Math.random() * list.length)];
 
 // Browser storage can be blocked (private mode, in-app browsers) — never let that break the page.
 const storage = {
@@ -327,12 +343,6 @@ const storage = {
   },
   remove(key) {
     try { window.localStorage.removeItem(key); } catch { /* ignore */ }
-  },
-  sessionGet(key) {
-    try { return window.sessionStorage.getItem(key); } catch { return null; }
-  },
-  sessionSet(key, value) {
-    try { window.sessionStorage.setItem(key, value); } catch { /* ignore */ }
   },
 };
 
@@ -372,10 +382,12 @@ function Backdrop() {
   );
 }
 
+// Snow — with the odd tennis ball mixed in, because the Alps are visiting a tennis club.
 function Snow() {
   const flakes = useMemo(
     () =>
-      Array.from({ length: 48 }, () => ({
+      Array.from({ length: 52 }, (_, i) => ({
+        ball: i % 11 === 0,
         left: Math.random() * 100,
         size: 2 + Math.random() * 4,
         duration: 9 + Math.random() * 12,
@@ -388,21 +400,40 @@ function Snow() {
 
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
-      {flakes.map((f, i) => (
-        <span
-          key={i}
-          className="flake"
-          style={{
-            left: `${f.left}%`,
-            width: f.size,
-            height: f.size,
-            opacity: f.opacity,
-            animationDuration: `${f.duration}s`,
-            animationDelay: `${f.delay}s`,
-            '--drift': `${f.drift}px`,
-          }}
-        />
-      ))}
+      {flakes.map((f, i) =>
+        f.ball ? (
+          <span
+            key={i}
+            className="flake"
+            style={{
+              left: `${f.left}%`,
+              background: 'none',
+              fontSize: 13,
+              lineHeight: 1,
+              opacity: 0.85,
+              animationDuration: `${f.duration * 0.8}s`,
+              animationDelay: `${f.delay}s`,
+              '--drift': `${f.drift}px`,
+            }}
+          >
+            🎾
+          </span>
+        ) : (
+          <span
+            key={i}
+            className="flake"
+            style={{
+              left: `${f.left}%`,
+              width: f.size,
+              height: f.size,
+              opacity: f.opacity,
+              animationDuration: `${f.duration}s`,
+              animationDelay: `${f.delay}s`,
+              '--drift': `${f.drift}px`,
+            }}
+          />
+        )
+      )}
     </div>
   );
 }
@@ -441,7 +472,7 @@ function Intro({ onDone }) {
       rotate: [0, -2, 2, -1, 1, 0],
       transition: { duration: 0.6, ease: 'easeOut' },
     });
-    const timer = setTimeout(onDone, 1700);
+    const timer = setTimeout(onDone, 1900);
     return () => clearTimeout(timer);
   }, [landed, onDone, shake]);
 
@@ -475,14 +506,19 @@ function Intro({ onDone }) {
         </span>
         <AnimatePresence>
           {landed && (
-            <motion.p
-              className="font-display -mt-2 text-center text-2xl text-[var(--yellow)] sm:text-4xl"
+            <motion.div
+              className="-mt-2 flex flex-col items-center gap-3"
               initial={{ opacity: 0, scale: 2.4, rotate: -8 }}
               animate={{ opacity: 1, scale: 1, rotate: -4 }}
               transition={{ type: 'spring', stiffness: 500, damping: 14 }}
             >
-              LEOPOLD WIRD 30!
-            </motion.p>
+              <p className="font-display text-center text-2xl text-[var(--yellow)] sm:text-4xl">
+                LEOPOLD WIRD 30!
+              </p>
+              <p className="chunky font-pixel bg-[#c8f000] px-3 py-2 text-[10px] text-black">
+                🎾 SPIELSTAND 30 : LOVE
+              </p>
+            </motion.div>
           )}
         </AnimatePresence>
       </motion.div>
@@ -498,10 +534,131 @@ function Intro({ onDone }) {
   );
 }
 
+/* ─────────────────── Gästelisten-Check + Easter Egg 4: Skifahrer ─────────── */
+
+function Skier({ onDone }) {
+  return (
+    <motion.span
+      aria-hidden="true"
+      className="pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-4xl"
+      initial={{ left: '104%' }}
+      animate={{ left: '-16%', y: [0, -8, 0, -5, 0, -8, 0] }}
+      transition={{ left: { duration: 1.5, ease: 'linear' }, y: { duration: 1.5 } }}
+      onAnimationComplete={onDone}
+      style={{ filter: 'drop-shadow(18px 0 0 rgba(255,255,255,.35)) drop-shadow(0 0 8px #00f0ff)' }}
+    >
+      ⛷️
+    </motion.span>
+  );
+}
+
+function NameGate({ onUnlock }) {
+  const [value, setValue] = useState('');
+  const [error, setError] = useState(false);
+  const [skiers, setSkiers] = useState([]);
+  const lastSkier = useRef(0);
+  const shake = useAnimationControls();
+
+  const handleType = (event) => {
+    setValue(event.target.value);
+    if (error) setError(false);
+    const now = Date.now();
+    if (now - lastSkier.current > 2200 && Math.random() < 0.4) {
+      lastSkier.current = now;
+      setSkiers((list) => [...list, now]);
+    }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const key = value.trim().toLowerCase();
+    if (GUESTS.includes(key)) {
+      document.activeElement?.blur(); // dismiss the phone keyboard before the transition
+      onUnlock(toDisplayName(key));
+      return;
+    }
+    setError(true);
+    shake.start({ x: [0, -12, 10, -6, 4, 0], transition: { duration: 0.45 } });
+  };
+
+  return (
+    <motion.section
+      className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-md flex-col justify-center px-5 py-12"
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -60, transition: { duration: 0.35 } }}
+      transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+    >
+      <p className="font-pixel text-center text-[10px] leading-relaxed text-[var(--cyan)]">
+        EINLADUNG · 12.12.2026
+      </p>
+      <h1 className="font-display neon-pink mt-4 text-center text-[clamp(2.4rem,12vw,3.6rem)] leading-[0.95]">
+        LEOPOLD
+        <br />
+        WIRD 30!
+      </h1>
+      <p className="font-body mt-5 text-center text-base text-white/75">
+        Nur für geladene Gäste. Wer bist du?
+      </p>
+
+      <form onSubmit={handleSubmit} noValidate className="chunky mt-8 bg-[#1a0838] p-5">
+        <label htmlFor="guest-name" className="font-pixel block text-[10px] leading-relaxed text-white/80">
+          DEIN VORNAME
+        </label>
+
+        <motion.div animate={shake} className="relative mt-3 overflow-hidden">
+          <input
+            id="guest-name"
+            name="guest-name"
+            type="text"
+            value={value}
+            onChange={handleType}
+            autoFocus
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="words"
+            spellCheck={false}
+            enterKeyHint="go"
+            aria-invalid={error}
+            aria-describedby={error ? 'gate-error' : undefined}
+            className="font-display block h-16 w-full rounded-none border-[3px] border-black bg-white px-4 text-2xl text-black outline-none focus:border-[var(--pink)] focus:shadow-[0_0_0_4px_var(--pink)]"
+          />
+          <AnimatePresence>
+            {skiers.map((id) => (
+              <Skier key={id} onDone={() => setSkiers((list) => list.filter((s) => s !== id))} />
+            ))}
+          </AnimatePresence>
+        </motion.div>
+
+        <div aria-live="polite">
+          {error && (
+            <p
+              id="gate-error"
+              role="alert"
+              className="font-body mt-3 bg-[var(--pink)] px-3 py-2 text-sm font-bold text-white"
+            >
+              Tippe den Namen ein, wie Leopold dich nennt.
+            </p>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          disabled={!value.trim()}
+          className="chunky font-display mt-5 flex min-h-14 w-full items-center justify-center gap-3 bg-[var(--yellow)] px-4 text-lg text-black disabled:opacity-60"
+        >
+          Rein da! <ArrowRight className="h-5 w-5" strokeWidth={3} />
+        </button>
+      </form>
+    </motion.section>
+  );
+}
+
 /* ──────────────────────────────── Layout bits ────────────────────────────── */
 
 function Marquee() {
-  const text = '★ LEOPOLD WIRD 30 ★ APRÈS-SKI EDITION ★ PUB QUIZ ★ FEUERSCHALE ★ 12.12.2026 ★ TC KLUFTERN ';
+  const text =
+    '★ LEOPOLD WIRD 30 ★ APRÈS-SKI EDITION ★ PUB QUIZ ★ CENTER COURT ★ 12.12.2026 ★ TC KLUFTERN ';
   return (
     <div
       className="relative z-20 overflow-hidden border-y-[3px] border-black bg-[var(--yellow)] py-2 text-black"
@@ -545,11 +702,11 @@ function Pop({ children, className = '', delay = 0, rotate = 0 }) {
 
 /* ────────────────────────────────── Hero ─────────────────────────────────── */
 
-function Hero() {
+function Hero({ name }) {
   return (
-    <header className="relative px-5 pb-6 pt-10 text-center">
+    <header className="relative px-5 pb-6 pt-8 text-center">
       <motion.div
-        className="chunky font-display absolute right-3 top-6 z-10 rotate-12 rounded-full bg-[var(--cyan)] px-3 py-2 text-[11px] leading-tight text-black"
+        className="chunky font-display absolute right-3 top-5 z-10 rotate-12 rounded-full bg-[var(--cyan)] px-3 py-2 text-[11px] leading-tight text-black"
         initial={{ scale: 0, rotate: -40 }}
         animate={{ scale: 1, rotate: 12 }}
         transition={{ type: 'spring', stiffness: 400, damping: 12, delay: 0.6 }}
@@ -560,16 +717,16 @@ function Hero() {
       </motion.div>
 
       <motion.p
-        className="font-pixel text-left text-[10px] leading-relaxed text-[var(--cyan)]"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
+        className="font-marker text-left text-[1.7rem] leading-none text-[var(--yellow)]"
+        initial={{ opacity: 0, x: -30, rotate: -6 }}
+        animate={{ opacity: 1, x: 0, rotate: -3 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 16, delay: 0.1 }}
       >
-        EINLADUNG // P1 READY
+        Servus, {name}!
       </motion.p>
 
       <motion.h1
-        className="font-display mt-5 leading-[0.9]"
+        className="font-display mt-6 leading-[0.9]"
         initial={{ opacity: 0, scale: 0.6 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ type: 'spring', stiffness: 300, damping: 16 }}
@@ -586,6 +743,17 @@ function Hero() {
       >
         Après-Ski Edition &amp; Pub Quiz
       </motion.p>
+
+      <motion.p
+        className="font-body mx-auto mt-6 max-w-sm text-lg font-medium leading-snug text-white/90"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+      >
+        Ich werde 30 und hole die Hüttengaudi dafür in den Tennisclub:{' '}
+        <span className="text-[#c8f000]">Après-Ski trifft Center Court.</span> Und du bist
+        eingeladen!
+      </motion.p>
     </header>
   );
 }
@@ -595,11 +763,8 @@ function Hero() {
 function FactCard({ label, title, children, accent, rotate }) {
   return (
     <Pop rotate={rotate}>
-      <div className="chunky bg-[#1a0838] p-5" style={{ borderColor: '#000' }}>
-        <p
-          className="font-pixel inline-block px-2 py-1 text-[10px] text-black"
-          style={{ background: accent }}
-        >
+      <div className="chunky bg-[#1a0838] p-5">
+        <p className="font-pixel inline-block px-2 py-1 text-[10px] text-black" style={{ background: accent }}>
           {label}
         </p>
         <p className="font-display mt-3 text-[1.7rem] leading-tight text-white">{title}</p>
@@ -612,16 +777,17 @@ function FactCard({ label, title, children, accent, rotate }) {
 function Facts() {
   return (
     <section className="space-y-5 px-5 py-6" aria-label="Die wichtigsten Infos">
-      <FactCard label="WAS" title="Leopolds 30. Geburtstag" accent="var(--pink)" rotate={-1}>
+      <FactCard label="WAS" title="Mein 30. Geburtstag" accent="var(--pink)" rotate={-1}>
         Après-Ski Edition &amp; Pub Quiz
       </FactCard>
 
       <FactCard label="WANN" title="Sa, 12. Dezember 2026" accent="var(--cyan)" rotate={1}>
-        ab <span className="font-display text-[var(--yellow)]">18:00 Uhr</span> — Ende offen
+        ab <span className="font-display text-[var(--yellow)]">18:00 Uhr</span>
       </FactCard>
 
       <FactCard label="WO" title="TC Kluftern" accent="var(--yellow)" rotate={-0.5}>
         Ganghoferstraße 9, Friedrichshafen
+        <p className="mt-1 text-base text-white/70">Parkplätze gibt’s genug.</p>
         <a
           href={MAPS_URL}
           target="_blank"
@@ -633,32 +799,294 @@ function Facts() {
         </a>
       </FactCard>
 
-      <Pop>
-        <blockquote className="relative mt-4 border-l-[6px] border-[var(--pink)] py-2 pl-4">
-          <p className="font-marker text-2xl leading-snug text-white">
-            „Wir essen, wir saufen, es gibt ein Pub Quiz und draußen brennt die Feuerschale.“
-          </p>
-          <Flame className="mt-2 h-7 w-7 text-orange-400" strokeWidth={2.2} aria-hidden="true" />
-        </blockquote>
-      </Pop>
+      <FactCard label="DRESSCODE" title="Alpine Elegance" accent="#c8f000" rotate={0.8}>
+        … ja, aber frieren nein.
+        <p className="alarm chunky font-display mt-4 px-3 py-3 text-center text-base leading-snug" role="note">
+          ⚠ ACHTUNG: Arschkalt im Clubheim – zieht euch warm an! ⚠
+        </p>
+      </FactCard>
+    </section>
+  );
+}
 
-      <Pop>
-        <div className="tape chunky p-2" role="note">
-          <div className="bg-black px-4 py-5 text-center">
-            <ThermometerSnowflake className="mx-auto h-9 w-9 text-[var(--cyan)]" strokeWidth={2} aria-hidden="true" />
-            <p className="font-display mt-2 text-2xl leading-tight text-[var(--yellow)]">
-              Es ist KALT im Tennisclub.
-            </p>
-            <p className="font-body mt-2 text-lg font-bold text-white">
-              Bitte zieht euch warm an!
-            </p>
-            <p className="font-body mt-1 text-base text-white/85">
-              Alpine Elegance ja, aber frieren nein.
+/* ───────────── RSVP + Easter Egg 7: Holographischer Skipass ─────────────── */
+
+function SkiPass({ name }) {
+  return (
+    <motion.div
+      className="relative mx-auto w-full max-w-sm"
+      initial={{ rotateY: 90, scale: 0.7 }}
+      animate={{ rotateY: 0, scale: 1 }}
+      transition={{ type: 'spring', stiffness: 160, damping: 14, delay: 0.25 }}
+      style={{ perspective: 800 }}
+    >
+      <motion.div
+        className="chunky relative overflow-hidden rounded-2xl bg-gradient-to-br from-[var(--cyan)] via-white to-[var(--pink)] p-5 text-black"
+        animate={{ y: [0, -6, 0], rotate: [-1.5, 1, -1.5] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <div aria-hidden="true" className="holo pointer-events-none absolute inset-0" />
+        <div className="relative">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="font-pixel text-[9px] leading-relaxed">SKIPASS &amp; PLATZBUCHUNG</p>
+              <p className="font-display mt-2 text-[1.9rem] leading-none">{name}</p>
+            </div>
+            <span className="chunky font-display shrink-0 rotate-6 bg-black px-2 py-1 text-sm text-[var(--yellow)]">
+              VIP
+            </span>
+          </div>
+
+          <dl className="font-body mt-4 grid grid-cols-2 gap-x-3 gap-y-2 text-[13px] font-bold">
+            <div>
+              <dt className="font-pixel text-[8px] opacity-70">GÜLTIG</dt>
+              <dd>12.12.2026 ab 18:00</dd>
+            </div>
+            <div>
+              <dt className="font-pixel text-[8px] opacity-70">PLATZ</dt>
+              <dd>Center Court · Clubheim</dd>
+            </div>
+            <div>
+              <dt className="font-pixel text-[8px] opacity-70">TARIF</dt>
+              <dd>Leopold 30 · All-Inclusive</dd>
+            </div>
+            <div>
+              <dt className="font-pixel text-[8px] opacity-70">STATUS</dt>
+              <dd className="flex items-center gap-1">
+                <Check className="h-4 w-4" strokeWidth={3} /> Zugesagt
+              </dd>
+            </div>
+          </dl>
+
+          <div className="mt-4 flex items-end justify-between gap-3">
+            <div aria-hidden="true" className="barcode h-10 flex-1" />
+            <p className="font-pixel text-right text-[8px] leading-relaxed">
+              30 : LOVE
+              <br />
+              No. 030
             </p>
           </div>
         </div>
-      </Pop>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function CalendarButtons() {
+  return (
+    <div className="grid gap-3">
+      <a
+        href={GOOGLE_CALENDAR_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="chunky font-display flex min-h-14 items-center justify-center gap-3 bg-white px-4 text-base text-black"
+      >
+        <CalendarPlus className="h-5 w-5 shrink-0" strokeWidth={2.2} />
+        Google Calendar
+      </a>
+      <button
+        type="button"
+        onClick={downloadIcs}
+        className="chunky font-display flex min-h-14 items-center justify-center gap-3 bg-[var(--cyan)] px-4 text-base text-black"
+      >
+        <Download className="h-5 w-5 shrink-0" strokeWidth={2.2} />
+        Apple / Outlook (.ics)
+      </button>
+    </div>
+  );
+}
+
+function Confirmed({ name, savedAt, onChange }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      className="space-y-7"
+    >
+      <div className="rainbow-border p-[5px]" role="status" aria-live="assertive">
+        <div className="bg-black px-5 py-6 text-center">
+          <p className="bam font-display text-[2.1rem] leading-none">BÄM!</p>
+          <p className="font-display mt-3 flex items-center justify-center gap-2 text-2xl leading-tight text-white">
+            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#22c55e] text-black">
+              <Check className="h-6 w-6" strokeWidth={4} />
+            </span>
+            Deine Zusage ist gespeichert!
+          </p>
+          <p className="font-body mt-5 text-xl font-bold leading-snug text-[var(--yellow)]">
+            Ich freu mich riesig auf dich, {name}! 🎉
+          </p>
+          <p className="font-marker mt-2 text-2xl text-white">– Leopold</p>
+          <p className="font-body mt-5 text-base font-medium text-white/85">
+            Hol dir den Termin direkt in deinen Kalender 👇
+          </p>
+          <p className="font-body mt-4 text-xs text-white/55">
+            Gespeichert für <strong className="text-white">{name}</strong>
+            {savedAt ? ` am ${formatSavedAt(savedAt)}` : ''}
+          </p>
+        </div>
+      </div>
+
+      <CalendarButtons />
+
+      <SkiPass name={name} />
+
+      <button
+        type="button"
+        onClick={onChange}
+        className="font-body mx-auto block min-h-12 text-sm text-white/50 underline underline-offset-4"
+      >
+        Doch nicht? Antwort ändern
+      </button>
+    </motion.div>
+  );
+}
+
+function Declined({ name, onChange }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="chunky bg-[#1a0838] px-5 py-7 text-center"
+      role="status"
+    >
+      <p className="text-5xl" aria-hidden="true">🥲</p>
+      <p className="font-display mt-3 text-2xl leading-tight text-white">Deine Absage ist gespeichert.</p>
+      <p className="font-body mt-3 text-lg font-bold text-white">
+        Schade, {name}! Danke, dass du mir Bescheid gibst.
+      </p>
+      <p className="font-marker mt-2 text-xl text-white/80">– Leopold</p>
+      <button
+        type="button"
+        onClick={onChange}
+        className="font-body mt-4 min-h-12 text-sm text-white/60 underline underline-offset-4"
+      >
+        Kannst du doch? Antwort ändern
+      </button>
+    </motion.div>
+  );
+}
+
+function readStoredRsvp(name) {
+  const raw = storage.get(RSVP_STORAGE_KEY);
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw);
+    return parsed && parsed.name === name && parsed.status ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function Rsvp({ name }) {
+  // Remembers this device's last answer for this guest, so a returning guest sees it's saved.
+  const stored = useMemo(() => readStoredRsvp(name), [name]);
+  // idle → confirming → confirmed   |   idle → declining → declined
+  const [phase, setPhase] = useState(stored ? stored.status : 'idle');
+  const [savedAt, setSavedAt] = useState(stored?.at ?? null);
+  const [error, setError] = useState('');
+  const busy = phase === 'confirming' || phase === 'declining';
+
+  const respond = async (status) => {
+    if (busy) return;
+    setError('');
+    setPhase(status === 'confirmed' ? 'confirming' : 'declining');
+    try {
+      await Promise.all([saveRsvp(name, status), wait(MIN_LOADING_MS)]);
+      const at = new Date().toISOString();
+      storage.set(RSVP_STORAGE_KEY, JSON.stringify({ name, status, at }));
+      setSavedAt(at);
+      setPhase(status);
+    } catch (err) {
+      console.error('[RSVP]', err);
+      setPhase('idle');
+      setError('Mist, die Verbindung hat gezickt – deine Antwort ist noch nicht gespeichert. Bitte nochmal drücken.');
+    }
+  };
+
+  const reset = () => {
+    storage.remove(RSVP_STORAGE_KEY);
+    setPhase('idle');
+  };
+
+  return (
+    <section id="rsvp" className="scroll-mt-6 px-5 py-10">
+      <SectionTitle kicker={`RSVP · BIS ${RSVP_DEADLINE}`} color="var(--cyan)">
+        Bist du dabei, {name}?
+      </SectionTitle>
+
+      <AnimatePresence mode="wait" initial={false}>
+        {phase === 'confirmed' ? (
+          <Confirmed key="confirmed" name={name} savedAt={savedAt} onChange={reset} />
+        ) : phase === 'declined' ? (
+          <Declined key="declined" name={name} onChange={reset} />
+        ) : (
+          <motion.div
+            key="ask"
+            className="chunky bg-[#1a0838] p-5"
+            exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.25 } }}
+          >
+            <p className="font-body text-lg font-medium leading-snug text-white/90">
+              Sag mir bitte bis zum <strong className="text-[var(--yellow)]">{RSVP_DEADLINE}</strong>{' '}
+              Bescheid. Ein Klick reicht.
+            </p>
+
+            <button
+              type="button"
+              onClick={() => respond('confirmed')}
+              disabled={busy}
+              aria-busy={phase === 'confirming'}
+              className="chunky font-display mt-5 flex min-h-16 w-full items-center justify-center gap-3 bg-[var(--pink)] px-4 text-xl text-white disabled:cursor-wait"
+            >
+              {phase === 'confirming' ? (
+                <>
+                  <Loader2 className="h-6 w-6 animate-spin" strokeWidth={2.5} />
+                  Speichere…
+                </>
+              ) : (
+                <>ICH BIN DABEI! 🎉</>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => respond('declined')}
+              disabled={busy}
+              className="font-body mx-auto mt-3 flex min-h-12 items-center gap-2 px-4 text-sm text-white/65 underline underline-offset-4 disabled:opacity-50"
+            >
+              {phase === 'declining' ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" /> Speichere Absage…
+                </>
+              ) : (
+                'Kann leider nicht 😢'
+              )}
+            </button>
+
+            <div aria-live="polite">
+              {error && (
+                <p role="alert" className="font-body mt-3 bg-[var(--pink)] px-3 py-2 text-sm font-bold text-white">
+                  {error}
+                </p>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
+  );
+}
+
+/* ─────────────────────────────── Bonus-Runde ─────────────────────────────── */
+
+function BonusDivider() {
+  return (
+    <Pop className="px-5 pb-2 pt-8" rotate={-2}>
+      <div className="chunky bg-[#c8f000] px-4 py-3 text-center text-black">
+        <p className="font-display text-2xl leading-none">🎾 TIEBREAK</p>
+        <p className="font-pixel mt-2 text-[9px] leading-relaxed">BONUS-RUNDE · AB HIER NUR NOCH SPASS</p>
+      </div>
+    </Pop>
   );
 }
 
@@ -681,7 +1109,7 @@ function Polaroid({ src, caption, rotate, className = '' }) {
         aria-hidden="true"
         className="absolute -top-3 left-1/2 h-6 w-16 -translate-x-1/2 rotate-[-4deg] bg-[var(--cyan)]/60"
       />
-      <div className="aspect-square overflow-hidden bg-zinc-800">
+      <div className="aspect-[4/5] overflow-hidden bg-zinc-800">
         {broken ? (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[var(--pink)] via-[#6b21a8] to-[var(--cyan)] p-3 text-center">
             <span className="font-pixel text-[9px] leading-relaxed text-white">FOTO FOLGT</span>
@@ -691,6 +1119,7 @@ function Polaroid({ src, caption, rotate, className = '' }) {
             src={src}
             alt={caption}
             loading="lazy"
+            decoding="async"
             onError={() => setBroken(true)}
             className="h-full w-full object-cover"
           />
@@ -703,17 +1132,27 @@ function Polaroid({ src, caption, rotate, className = '' }) {
   );
 }
 
-function PolaroidPair({ items }) {
+function PolaroidGroup({ items }) {
   return (
-    <div className="relative flex justify-center gap-3 px-5 py-10">
+    <div className="relative flex flex-wrap justify-center gap-x-3 gap-y-8 px-5 py-10">
       {items.map((item, i) => (
-        <Polaroid key={item.src} {...item} className={i === 1 ? 'mt-8' : ''} />
+        <Polaroid key={item.src} {...item} className={i % 2 === 1 ? 'mt-8' : ''} />
       ))}
     </div>
   );
 }
 
-/* ───────────────── Easter Egg 2: Das Frost-Rubbellos (Verpflegung) ───────── */
+const POLAROIDS_KIDS = [
+  { src: './leo-1.jpg', caption: 'Frisur schon damals Après-Ski-ready', rotate: -7 },
+  { src: './leo-2.jpg', caption: 'Cool bleiben seit ’96', rotate: 6 },
+  { src: './leo-3.jpg', caption: 'Ballgefühl hatte ich schon immer', rotate: -3 },
+];
+const POLAROIDS_SNOW = [
+  { src: './leo-4.jpg', caption: 'Meine Bremstechnik', rotate: 5 },
+  { src: './leo-5.jpg', caption: 'Der Aufstieg zur 30', rotate: -6 },
+];
+
+/* ───────────── Easter Egg 2: Das Frost-Rubbellos (leibliches Wohl) ───────── */
 
 function FrostScratch() {
   const wrapRef = useRef(null);
@@ -819,7 +1258,7 @@ function FrostScratch() {
   return (
     <section className="px-5 py-8">
       <SectionTitle kicker="RUBBELLOS · VERPFLEGUNG" color="var(--yellow)">
-        Was gibt’s zu futtern?
+        Wie ist es um mein leibliches Wohl bestellt?
       </SectionTitle>
 
       <div ref={wrapRef} className="chunky relative min-h-44 overflow-hidden bg-[var(--pink)]">
@@ -875,9 +1314,9 @@ function FrostScratch() {
 /* ───────────────── Easter Egg 3: Der Outfit-Generator (Slot Machine) ─────── */
 
 const REELS = [
-  ['Neon-Skianzug', 'Retro-Anorak', 'Pinke Daunenjacke', 'Onesie von ’94', 'Norweger-Pulli', 'Fleece-Overall'],
-  ['Moonboots', 'Après-Ski-Stiefel', 'Thermo-Leggings', 'Kniestrümpfe', 'Schneestiefel', 'Skischuhe (mutig)'],
-  ['Wollmütze', 'Stirnband in Neon', 'Skibrille auf Stirn', 'Bommelmütze', 'Ohrenwärmer', 'Neon-Sonnenbrille'],
+  ['Neon-Skianzug', 'Retro-Anorak', 'Pinke Daunenjacke', 'Onesie von ’96', 'Norweger-Pulli', 'Tennisrock über Skihose'],
+  ['Moonboots', 'Après-Ski-Stiefel', 'Thermo-Leggings', 'Kniestrümpfe', 'Schneestiefel', 'Tennissocken in Moonboots'],
+  ['Wollmütze', 'Schweißband in Neon', 'Skibrille auf Stirn', 'Bommelmütze', 'Ohrenwärmer', 'Neon-Sonnenbrille'],
 ];
 
 function Reel({ items, index, spinning }) {
@@ -950,12 +1389,12 @@ function OutfitSlot() {
 
   return (
     <section className="px-5 py-8">
-      <SectionTitle kicker="DRESSCODE · ALPINE ELEGANCE" color="var(--pink)">
-        Was zieh ich an?
+      <SectionTitle kicker="OUTFIT-AUTOMAT" color="var(--pink)">
+        Keine Idee, was du anziehen sollst?
       </SectionTitle>
 
       <div className="chunky bg-[#1a0838] p-4">
-        <div className="flex gap-2" aria-live="polite">
+        <div className="flex gap-2">
           {REELS.map((items, reel) => (
             <Reel key={reel} items={items} index={indexes[reel]} spinning={spinning[reel]} />
           ))}
@@ -974,10 +1413,6 @@ function OutfitSlot() {
           {busy ? 'Rattert…' : spun ? 'Nochmal drehen!' : 'Dresscode Inspo'}
         </button>
       </div>
-
-      <p className="alarm chunky font-display mt-5 px-4 py-3 text-center text-base leading-snug" role="note">
-        ⚠ ACHTUNG: Arschkalt im Clubheim – zieht euch warm an! ⚠
-      </p>
     </section>
   );
 }
@@ -985,12 +1420,12 @@ function OutfitSlot() {
 /* ────────────────── Easter Egg 6: Pub-Quiz Sneak Peek (Modal) ────────────── */
 
 const QUIZ = {
-  question: 'Was ist Leopolds Signature-Move auf der Piste?',
+  question: 'Mit welchen Ski ist Leopold die 2025 Saison gefahren?',
   answers: [
-    { id: 'a', text: 'Der elegante Pizza-Stopp', reply: 'Solide Technik. Aber nein – so elegant ist er nicht.' },
-    { id: 'b', text: 'Direkt zur Schirmbar abbiegen', reply: 'Fast! Er biegt schon an der Talstation ab.' },
-    { id: 'c', text: 'Der unfreiwillige Salto', reply: 'Die Zeugen schweigen. Kein Kommentar.' },
-    { id: 'd', text: 'Alles davon in einer Abfahrt', reply: 'JACKPOT! Genau so war’s. 🏆' },
+    { id: 'a', text: 'Aperol Spritz Ski', note: 'sie waren sehr langsam', correct: true },
+    { id: 'b', text: 'Paulaner Weißbier Ski', note: 'sie waren sehr steif' },
+    { id: 'c', text: 'Ramazzotti Ski', note: 'sie waren sehr kurze Trick-Ski' },
+    { id: 'd', text: 'Müller-Thurgau Ski', note: 'sie waren sehr trocken' },
   ],
 };
 
@@ -1046,7 +1481,7 @@ function PubQuiz() {
               role="dialog"
               aria-modal="true"
               aria-labelledby="quiz-title"
-              className="chunky relative w-full max-w-md bg-[#1a0838] p-5 pt-6 text-left"
+              className="chunky relative max-h-[92dvh] w-full max-w-md overflow-y-auto bg-[#1a0838] p-5 pt-6 text-left"
               style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 1.25rem)' }}
               initial={{ y: 80, scale: 0.9, rotate: -3 }}
               animate={{ y: 0, scale: 1, rotate: 0 }}
@@ -1071,25 +1506,33 @@ function PubQuiz() {
 
               <div className="mt-5 grid gap-3">
                 {QUIZ.answers.map((a) => {
-                  const active = choice === a.id;
+                  const revealed = Boolean(choice);
+                  const isPicked = choice === a.id;
+                  let tone = 'bg-white text-black';
+                  if (revealed && a.correct) tone = 'bg-[#22c55e] text-black';
+                  else if (isPicked) tone = 'bg-[var(--pink)] text-white';
                   return (
                     <motion.button
                       key={a.id}
                       type="button"
                       onClick={() => setChoice(a.id)}
                       whileTap={{ scale: 0.97 }}
-                      className={`chunky font-body flex min-h-12 items-center gap-3 px-4 py-3 text-left text-base font-bold ${
-                        active ? 'bg-[var(--pink)] text-white' : 'bg-white text-black'
-                      }`}
+                      animate={isPicked && !a.correct ? { x: [0, -8, 8, -4, 0] } : {}}
+                      className={`chunky font-body flex min-h-12 items-start gap-3 px-4 py-3 text-left ${tone}`}
                     >
-                      <span className="font-display text-sm uppercase">{a.id})</span>
-                      {a.text}
+                      <span className="font-display mt-0.5 text-sm uppercase">{a.id})</span>
+                      <span>
+                        <span className="block text-base font-bold">{a.text}</span>
+                        <span className="block text-sm opacity-75">({a.note})</span>
+                      </span>
+                      {revealed && a.correct && <Check className="ml-auto h-5 w-5 shrink-0" strokeWidth={3} />}
+                      {isPicked && !a.correct && <X className="ml-auto h-5 w-5 shrink-0" strokeWidth={3} />}
                     </motion.button>
                   );
                 })}
               </div>
 
-              <div className="min-h-20" aria-live="polite">
+              <div className="min-h-24" aria-live="polite">
                 <AnimatePresence mode="wait">
                   {picked && (
                     <motion.div
@@ -1100,7 +1543,11 @@ function PubQuiz() {
                       transition={{ type: 'spring', stiffness: 500, damping: 18 }}
                       className="mt-5"
                     >
-                      <p className="font-display text-lg leading-snug text-[var(--yellow)]">{picked.reply}</p>
+                      <p className="font-display text-lg leading-snug text-[var(--yellow)]">
+                        {picked.correct
+                          ? 'Richtig! 🍹 Langsam, aber mit Stil.'
+                          : 'Leider falsch! Ich war auf Aperol Spritz Ski unterwegs – sehr langsam, aber mit Stil. 🍹'}
+                      </p>
                       <p className="font-body mt-2 text-sm text-white/70">
                         Die echten Fragen gibt’s am 12.12. – und die werden härter.
                       </p>
@@ -1113,382 +1560,6 @@ function PubQuiz() {
         )}
       </AnimatePresence>
     </section>
-  );
-}
-
-/* ───────────── Easter Egg 7: Holographischer Skipass + Bestätigung ──────── */
-
-function SkiPass({ name }) {
-  return (
-    <motion.div
-      className="relative mx-auto w-full max-w-sm"
-      initial={{ rotateY: 90, scale: 0.7 }}
-      animate={{ rotateY: 0, scale: 1 }}
-      transition={{ type: 'spring', stiffness: 160, damping: 14, delay: 0.25 }}
-      style={{ perspective: 800 }}
-    >
-      <motion.div
-        className="chunky relative overflow-hidden rounded-2xl bg-gradient-to-br from-[var(--cyan)] via-white to-[var(--pink)] p-5 text-black"
-        animate={{ y: [0, -6, 0], rotate: [-1.5, 1, -1.5] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        <div aria-hidden="true" className="holo pointer-events-none absolute inset-0" />
-        <div className="relative">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="font-pixel text-[9px]">SKIPASS · SAISON 26/27</p>
-              <p className="font-display mt-2 text-[1.9rem] leading-none">{name}</p>
-            </div>
-            <span className="chunky font-display shrink-0 rotate-6 bg-black px-2 py-1 text-sm text-[var(--yellow)]">
-              VIP
-            </span>
-          </div>
-
-          <dl className="font-body mt-4 grid grid-cols-2 gap-x-3 gap-y-2 text-[13px] font-bold">
-            <div>
-              <dt className="font-pixel text-[8px] opacity-70">GÜLTIG</dt>
-              <dd>12.12.2026 ab 18:00</dd>
-            </div>
-            <div>
-              <dt className="font-pixel text-[8px] opacity-70">ZONE</dt>
-              <dd>TC Kluftern</dd>
-            </div>
-            <div>
-              <dt className="font-pixel text-[8px] opacity-70">TARIF</dt>
-              <dd>Leo 30 · All-Inclusive</dd>
-            </div>
-            <div>
-              <dt className="font-pixel text-[8px] opacity-70">STATUS</dt>
-              <dd className="flex items-center gap-1">
-                <Check className="h-4 w-4" strokeWidth={3} /> Zugesagt
-              </dd>
-            </div>
-          </dl>
-
-          <div className="mt-4 flex items-end justify-between gap-3">
-            <div aria-hidden="true" className="barcode h-10 flex-1" />
-            <p className="font-pixel text-[8px]">No. 030</p>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-function CalendarButtons() {
-  return (
-    <div className="grid gap-3">
-      <a
-        href={GOOGLE_CALENDAR_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="chunky font-display flex min-h-14 items-center justify-center gap-3 bg-white px-4 text-base text-black"
-      >
-        <CalendarPlus className="h-5 w-5 shrink-0" strokeWidth={2.2} />
-        Google Calendar
-      </a>
-      <button
-        type="button"
-        onClick={downloadIcs}
-        className="chunky font-display flex min-h-14 items-center justify-center gap-3 bg-[var(--cyan)] px-4 text-base text-black"
-      >
-        <Download className="h-5 w-5 shrink-0" strokeWidth={2.2} />
-        Apple / Outlook (.ics)
-      </button>
-    </div>
-  );
-}
-
-function Confirmed({ name, savedAt, onChange }) {
-  return (
-    <motion.div
-      key="confirmed"
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="space-y-7"
-    >
-      <div className="rainbow-border p-[5px]" role="status" aria-live="assertive">
-        <div className="bg-black px-5 py-6 text-center">
-          <p className="bam font-display text-[2.1rem] leading-none">BÄM!</p>
-          <p className="font-display mt-3 flex items-center justify-center gap-2 text-2xl leading-tight text-white">
-            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#22c55e] text-black">
-              <Check className="h-6 w-6" strokeWidth={4} />
-            </span>
-            Zusage ist gespeichert!
-          </p>
-          <p className="font-body mt-4 text-lg font-bold leading-snug text-white">
-            Leopold hat die Info in seiner Datenbank.
-          </p>
-          <p className="font-body mt-2 text-lg font-bold leading-snug text-[var(--yellow)]">
-            Du musst ihm NICHT nochmal auf WhatsApp schreiben.
-          </p>
-          <p className="font-body mt-2 text-lg font-bold leading-snug text-white">
-            Lad dir jetzt den Termin in den Kalender! 👇
-          </p>
-          <p className="font-body mt-4 text-xs text-white/60">
-            Gespeichert für <strong className="text-white">{name}</strong>
-            {savedAt ? ` am ${formatSavedAt(savedAt)}` : ''}
-          </p>
-        </div>
-      </div>
-
-      <SkiPass name={name} />
-
-      <CalendarButtons />
-
-      <button
-        type="button"
-        onClick={onChange}
-        className="font-body mx-auto block min-h-12 text-sm text-white/50 underline underline-offset-4"
-      >
-        Doch nicht? Antwort ändern
-      </button>
-    </motion.div>
-  );
-}
-
-function Declined({ name, onChange }) {
-  return (
-    <motion.div
-      key="declined"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="chunky bg-[#1a0838] px-5 py-7 text-center"
-      role="status"
-    >
-      <p className="text-5xl" aria-hidden="true">🥲</p>
-      <p className="font-display mt-3 text-2xl leading-tight text-white">Absage ist gespeichert.</p>
-      <p className="font-body mt-3 text-lg font-bold text-white">
-        Schade, {name}! Leopold weiß Bescheid – du musst ihm nicht extra schreiben.
-      </p>
-      <button
-        type="button"
-        onClick={onChange}
-        className="font-body mt-4 min-h-12 text-sm text-white/60 underline underline-offset-4"
-      >
-        Kann doch? Antwort ändern
-      </button>
-    </motion.div>
-  );
-}
-
-/* ───────────── RSVP + Easter Egg 4: Der Skifahrer-Angriff ─────────────────── */
-
-function Skier({ onDone }) {
-  return (
-    <motion.span
-      aria-hidden="true"
-      className="pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-4xl"
-      initial={{ left: '104%' }}
-      animate={{ left: '-16%', y: [0, -8, 0, -5, 0, -8, 0] }}
-      transition={{ left: { duration: 1.5, ease: 'linear' }, y: { duration: 1.5 } }}
-      onAnimationComplete={onDone}
-      style={{ filter: 'drop-shadow(18px 0 0 rgba(255,255,255,.35)) drop-shadow(0 0 8px #00f0ff)' }}
-    >
-      ⛷️
-    </motion.span>
-  );
-}
-
-function readStoredRsvp() {
-  const raw = storage.get(RSVP_STORAGE_KEY);
-  if (!raw) return null;
-  try {
-    const parsed = JSON.parse(raw);
-    return parsed && parsed.name && parsed.status ? parsed : null;
-  } catch {
-    return null;
-  }
-}
-
-function Rsvp({ onPhaseChange }) {
-  const stored = useMemo(readStoredRsvp, []);
-  // idle → confirming → confirmed   |   idle → declining → declined
-  const [phase, setPhase] = useState(stored ? stored.status : 'idle');
-  const [value, setValue] = useState('');
-  const [guest, setGuest] = useState(stored?.name ?? '');
-  const [savedAt, setSavedAt] = useState(stored?.at ?? null);
-  const [error, setError] = useState('');
-  const [skiers, setSkiers] = useState([]);
-  const lastSkier = useRef(0);
-  const shake = useAnimationControls();
-  const busy = phase === 'confirming' || phase === 'declining';
-
-  useEffect(() => {
-    onPhaseChange?.(phase);
-  }, [phase, onPhaseChange]);
-
-  const handleType = (event) => {
-    setValue(event.target.value);
-    if (error) setError('');
-    const now = Date.now();
-    if (now - lastSkier.current > 2200 && Math.random() < 0.4) {
-      lastSkier.current = now;
-      setSkiers((list) => [...list, now]);
-    }
-  };
-
-  const respond = async (status) => {
-    if (busy) return;
-    const key = value.trim().toLowerCase();
-    if (!GUESTS.includes(key)) {
-      setError(
-        key
-          ? 'Den Namen haben wir nicht auf der Liste. Tipp deinen Vornamen so, wie Leopold dich nennt.'
-          : 'Erst deinen Vornamen eintippen!'
-      );
-      shake.start({ x: [0, -12, 10, -6, 4, 0], transition: { duration: 0.45 } });
-      return;
-    }
-
-    const name = toDisplayName(key);
-    setError('');
-    setPhase(status === 'confirmed' ? 'confirming' : 'declining');
-    try {
-      await Promise.all([saveRsvp(name, status), wait(MIN_LOADING_MS)]);
-      const at = new Date().toISOString();
-      storage.set(RSVP_STORAGE_KEY, JSON.stringify({ name, status, at }));
-      setGuest(name);
-      setSavedAt(at);
-      setPhase(status);
-    } catch (err) {
-      console.error('[RSVP]', err);
-      setPhase('idle');
-      setError(
-        'Mist, die Verbindung hat gezickt – deine Antwort ist NICHT gespeichert. Bitte nochmal drücken.'
-      );
-    }
-  };
-
-  const reset = () => {
-    storage.remove(RSVP_STORAGE_KEY);
-    setValue(guest);
-    setPhase('idle');
-  };
-
-  return (
-    <section id="rsvp" className="scroll-mt-6 px-5 py-10">
-      <SectionTitle kicker="RSVP · EIN KLICK REICHT" color="var(--cyan)">
-        Bist du dabei?
-      </SectionTitle>
-
-      <AnimatePresence mode="wait" initial={false}>
-        {phase === 'confirmed' ? (
-          <Confirmed key="confirmed" name={guest} savedAt={savedAt} onChange={reset} />
-        ) : phase === 'declined' ? (
-          <Declined key="declined" name={guest} onChange={reset} />
-        ) : (
-          <motion.form
-            key="form"
-            className="chunky bg-[#1a0838] p-5"
-            exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.25 } }}
-            onSubmit={(e) => {
-              e.preventDefault();
-              respond('confirmed');
-            }}
-            noValidate
-          >
-            <label htmlFor="guest-name" className="font-pixel block text-[10px] leading-relaxed text-white/80">
-              DEIN VORNAME
-            </label>
-
-            <motion.div animate={shake} className="relative mt-3 overflow-hidden">
-              <input
-                id="guest-name"
-                name="guest-name"
-                type="text"
-                value={value}
-                onChange={handleType}
-                disabled={busy}
-                autoComplete="off"
-                autoCorrect="off"
-                autoCapitalize="words"
-                spellCheck={false}
-                enterKeyHint="send"
-                placeholder="z. B. Cornelius"
-                aria-invalid={Boolean(error)}
-                aria-describedby={error ? 'rsvp-error' : undefined}
-                className="font-display block h-16 w-full rounded-none border-[3px] border-black bg-white px-4 text-2xl text-black outline-none placeholder:text-black/25 focus:border-[var(--pink)] focus:shadow-[0_0_0_4px_var(--pink)]"
-              />
-              <AnimatePresence>
-                {skiers.map((id) => (
-                  <Skier key={id} onDone={() => setSkiers((list) => list.filter((s) => s !== id))} />
-                ))}
-              </AnimatePresence>
-            </motion.div>
-
-            <div aria-live="polite">
-              {error && (
-                <p
-                  id="rsvp-error"
-                  role="alert"
-                  className="font-body mt-3 bg-[var(--pink)] px-3 py-2 text-sm font-bold text-white"
-                >
-                  {error}
-                </p>
-              )}
-            </div>
-
-            <button
-              type="submit"
-              disabled={busy}
-              aria-busy={phase === 'confirming'}
-              className="chunky font-display mt-5 flex min-h-16 w-full items-center justify-center gap-3 bg-[var(--pink)] px-4 text-xl text-white disabled:cursor-wait"
-            >
-              {phase === 'confirming' ? (
-                <>
-                  <Loader2 className="h-6 w-6 animate-spin" strokeWidth={2.5} />
-                  Speichere…
-                </>
-              ) : (
-                <>ICH BIN DABEI! 🎉</>
-              )}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => respond('declined')}
-              disabled={busy}
-              className="font-body mx-auto mt-3 flex min-h-12 items-center gap-2 px-4 text-sm text-white/65 underline underline-offset-4 disabled:opacity-50"
-            >
-              {phase === 'declining' ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" /> Speichere Absage…
-                </>
-              ) : (
-                'Kann leider nicht 😢'
-              )}
-            </button>
-          </motion.form>
-        )}
-      </AnimatePresence>
-    </section>
-  );
-}
-
-/* ───────────────────────────── Floating RSVP CTA ─────────────────────────── */
-
-function FloatingCta({ hidden }) {
-  return (
-    <AnimatePresence>
-      {!hidden && (
-        <motion.a
-          href="#rsvp"
-          className="chunky font-display fixed z-40 flex min-h-12 items-center gap-2 bg-[var(--yellow)] px-4 text-sm text-black"
-          style={{
-            right: '1rem',
-            bottom: 'calc(env(safe-area-inset-bottom) + 1rem)',
-          }}
-          initial={{ y: 120, rotate: 8 }}
-          animate={{ y: 0, rotate: -3 }}
-          exit={{ y: 120 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 18 }}
-        >
-          Jetzt zusagen <ArrowRight className="h-4 w-4" strokeWidth={3} />
-        </motion.a>
-      )}
-    </AnimatePresence>
   );
 }
 
@@ -1532,19 +1603,22 @@ function CopyIban() {
 function Gifts() {
   return (
     <section className="px-5 py-8">
-      <SectionTitle kicker="GESCHENKE?" color="var(--pink)">
-        Nur wenn du magst
+      <SectionTitle kicker="GESCHENKE" color="var(--pink)">
+        Echt nicht nötig!
       </SectionTitle>
       <div className="chunky bg-[#1a0838] p-5">
-        <p className="font-body text-base text-white/90">
-          Dass du kommst, ist Geschenk genug. Wer trotzdem was geben will: eine Spende an den
-          Tennisclub, der uns die Hütte leiht.
+        <p className="font-body text-base leading-relaxed text-white/90">
+          Du musst mir nichts schenken – dass du kommst, ist das Beste. Wenn du trotzdem etwas
+          geben möchtest, unterstütz gern die Jugendarbeit im TC Kluftern.
         </p>
-        <p className="font-display mt-4 text-lg text-white">TC Kluftern</p>
+        <p className="font-body mt-3 text-base leading-relaxed text-white/90">
+          Kleiner Bonus mit Augenzwinkern: Deine Spende kannst du in der Steuererklärung angeben –
+          das Finanzamt feiert also quasi mit. 😉
+        </p>
+        <p className="font-display mt-5 text-lg text-white">TC Kluftern</p>
         <CopyIban />
-        <p className="font-body mt-3 text-sm text-white/80">Verwendungszweck: Spende</p>
-        <p className="font-body mt-1 text-xs text-white/55">
-          (Steuerlich absetzbar in deiner Steuererklärung 2026.)
+        <p className="font-body mt-3 text-sm text-white/80">
+          Verwendungszweck: <strong className="text-white">Spende</strong>
         </p>
       </div>
     </section>
@@ -1565,11 +1639,8 @@ function Footer() {
   }, []);
 
   return (
-    <footer
-      className="px-6 pb-24 pt-6 text-center"
-      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 6rem)' }}
-    >
-      <p className="font-pixel text-[9px] leading-relaxed text-white/40">GAME OVER? NEVER. · 1996 – 2026</p>
+    <footer className="px-6 pt-6 text-center" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 2rem)' }}>
+      <p className="font-pixel text-[9px] leading-relaxed text-white/40">GAME, SET, 30 · 1996 – 2026</p>
       <a
         href={href}
         {...(!isIOS && { target: '_blank', rel: 'noopener noreferrer' })}
@@ -1583,24 +1654,17 @@ function Footer() {
 
 /* ───────────────────────────────── App ───────────────────────────────────── */
 
-const POLAROIDS_TOP = [
-  { src: './leo-1.jpg', caption: 'Beweisfoto #1', rotate: -7 },
-  { src: './leo-2.jpg', caption: 'Pistensau, ca. 1999', rotate: 6 },
-];
-const POLAROIDS_BOTTOM = [
-  { src: './leo-3.jpg', caption: 'Après-Ski-Profi', rotate: 5 },
-  { src: './leo-4.jpg', caption: 'Bald: 30 & fabelhaft', rotate: -6 },
-];
-
+// Every visit starts from the top: intro → guest check → invitation.
 function App() {
   const reduceMotion = useReducedMotion();
-  const [showIntro, setShowIntro] = useState(
-    () => !reduceMotion && storage.sessionGet(INTRO_STORAGE_KEY) !== '1'
-  );
+  const [stage, setStage] = useState(reduceMotion ? 'gate' : 'intro');
+  const [guest, setGuest] = useState(null);
 
-  const endIntro = useCallback(() => {
-    storage.sessionSet(INTRO_STORAGE_KEY, '1');
-    setShowIntro(false);
+  const endIntro = useCallback(() => setStage((s) => (s === 'intro' ? 'gate' : s)), []);
+  const unlock = useCallback((name) => {
+    setGuest(name);
+    setStage('page');
+    window.scrollTo(0, 0);
   }, []);
 
   return (
@@ -1609,45 +1673,40 @@ function App() {
         <Backdrop />
         <Snow />
 
-        <AnimatePresence>{showIntro && <Intro key="intro" onDone={endIntro} />}</AnimatePresence>
-
-        {!showIntro && <Page />}
+        <AnimatePresence mode="wait">
+          {stage === 'intro' && <Intro key="intro" onDone={endIntro} />}
+          {stage === 'gate' && <NameGate key="gate" onUnlock={unlock} />}
+          {stage === 'page' && <Invitation key="page" name={guest} />}
+        </AnimatePresence>
       </div>
     </MotionConfig>
   );
 }
 
-// Mounted only after the intro, so the in-view observer attaches to a real element.
-function Page() {
-  const rsvpRef = useRef(null);
-  const rsvpInView = useInView(rsvpRef);
-  const [rsvpPhase, setRsvpPhase] = useState('idle');
-  const answered = rsvpPhase === 'confirmed' || rsvpPhase === 'declined';
-
+function Invitation({ name }) {
   return (
-          <motion.div
-            className="relative z-10"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Marquee />
-            <main className="mx-auto w-full max-w-lg">
-              <Hero />
-              <Facts />
-              <PolaroidPair items={POLAROIDS_TOP} />
-              <FrostScratch />
-              <OutfitSlot />
-              <PolaroidPair items={POLAROIDS_BOTTOM} />
-              <PubQuiz />
-              <div ref={rsvpRef}>
-                <Rsvp onPhaseChange={setRsvpPhase} />
-              </div>
-              <Gifts />
-              <Footer />
-            </main>
-            <FloatingCta hidden={answered || rsvpInView} />
-          </motion.div>
+    <motion.div
+      className="relative z-10"
+      initial={{ opacity: 0, y: 60 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: 'spring', stiffness: 200, damping: 24 }}
+    >
+      <Marquee />
+      <main className="mx-auto w-full max-w-lg">
+        <Hero name={name} />
+        <Facts />
+        <Rsvp name={name} />
+
+        <BonusDivider />
+        <PolaroidGroup items={POLAROIDS_KIDS} />
+        <FrostScratch />
+        <OutfitSlot />
+        <PolaroidGroup items={POLAROIDS_SNOW} />
+        <PubQuiz />
+        <Gifts />
+        <Footer />
+      </main>
+    </motion.div>
   );
 }
 
