@@ -1,0 +1,1659 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d0221" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Leopold wird 30 — Après-Ski Edition &amp; Pub Quiz</title>
+  <meta name="description" content="Leopolds 30. Geburtstag · 12.12.2026 ab 18:00 · TC Kluftern · Après-Ski Edition &amp; Pub Quiz." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Bungee&family=Permanent+Marker&family=Press+Start+2P&family=Space+Grotesk:wght@400;500;700&display=swap"
+  />
+  <link rel="preconnect" href="https://esm.sh" crossorigin />
+
+  <!-- Tailwind CSS v4 (runtime, no build step) -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.13"></script>
+
+  <style>
+    :root {
+      --pink: #ff2bd6;
+      --cyan: #00f0ff;
+      --yellow: #e5ff00;
+      --night: #0d0221;
+    }
+    html, body { margin: 0; background-color: var(--night); }
+    body { -webkit-tap-highlight-color: transparent; }
+    .font-display { font-family: 'Bungee', 'Arial Black', Impact, sans-serif; }
+    .font-marker { font-family: 'Permanent Marker', 'Comic Sans MS', cursive; }
+    .font-pixel { font-family: 'Press Start 2P', ui-monospace, monospace; }
+    .font-body { font-family: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif; }
+
+    /* Neon text */
+    .neon-pink { color: #fff; text-shadow: 0 0 4px #fff, 0 0 12px var(--pink), 0 0 28px var(--pink), 0 0 48px var(--pink); }
+    .neon-cyan { color: #fff; text-shadow: 0 0 4px #fff, 0 0 12px var(--cyan), 0 0 28px var(--cyan); }
+    .neon-yellow { color: var(--yellow); text-shadow: 0 0 10px rgba(229,255,0,.8), 0 0 30px rgba(229,255,0,.5); }
+    .flicker { animation: flicker 4s infinite; }
+    @keyframes flicker {
+      0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
+      20%, 24%, 55% { opacity: .55; }
+    }
+
+    /* Chunky 90s buttons & boxes */
+    .chunky { border: 3px solid #000; box-shadow: 6px 6px 0 #000; transition: transform .12s, box-shadow .12s; }
+    .chunky:active { transform: translate(4px, 4px); box-shadow: 2px 2px 0 #000; }
+
+    /* Caution tape */
+    .tape {
+      background: repeating-linear-gradient(-45deg, var(--yellow) 0 18px, #000 18px 36px);
+    }
+
+    /* Snow */
+    .flake {
+      position: absolute; top: -12px; border-radius: 9999px; background: #fff;
+      animation-name: fall; animation-timing-function: linear; animation-iteration-count: infinite;
+      will-change: transform;
+    }
+    @keyframes fall {
+      0%   { transform: translate3d(0, 0, 0); }
+      50%  { transform: translate3d(var(--drift), 52vh, 0); }
+      100% { transform: translate3d(calc(var(--drift) * -0.5), 105vh, 0); }
+    }
+
+    /* Marquee */
+    .marquee { animation: marquee 22s linear infinite; }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+
+    /* Blinking warning — swaps colours instead of disappearing, so it stays readable */
+    .alarm { animation: alarm 0.9s steps(1, end) infinite; }
+    @keyframes alarm {
+      0%   { background: var(--yellow); color: #000; }
+      50%  { background: var(--pink);   color: #fff; }
+    }
+
+    /* Big confirmation headline */
+    .bam { animation: bam 0.7s steps(1, end) infinite; }
+    @keyframes bam {
+      0%  { color: var(--yellow); }
+      50% { color: #fff; }
+    }
+    .rainbow-border {
+      background: linear-gradient(90deg, var(--pink), var(--yellow), var(--cyan), var(--pink));
+      background-size: 300% 100%;
+      animation: rainbow 2s linear infinite;
+    }
+    @keyframes rainbow { to { background-position: 300% 0; } }
+
+    /* Holographic ski pass */
+    .holo {
+      background: linear-gradient(115deg,
+        transparent 20%, rgba(255,43,214,.55) 32%, rgba(0,240,255,.55) 42%,
+        rgba(229,255,0,.55) 52%, rgba(255,43,214,.45) 62%, transparent 75%);
+      background-size: 250% 250%;
+      mix-blend-mode: color-dodge;
+      animation: holo 3.2s ease-in-out infinite alternate;
+    }
+    @keyframes holo { from { background-position: 100% 100%; } to { background-position: 0% 0%; } }
+    .barcode {
+      background: repeating-linear-gradient(90deg,
+        #000 0 2px, transparent 2px 4px, #000 4px 7px, transparent 7px 8px,
+        #000 8px 9px, transparent 9px 12px, #000 12px 15px, transparent 15px 17px);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .flake, .marquee, .flicker, .holo, .rainbow-border { animation: none !important; }
+      .flake { display: none; }
+      .alarm, .bam { animation-duration: 3s; }
+    }
+
+    /* Shown only while the libraries load; React replaces it on mount */
+    .boot { position: fixed; inset: 0; display: grid; place-items: center; font: 700 14vw/1 'Arial Black', Impact, sans-serif; color: #fff; text-shadow: 0 0 20px #ff2bd6; }
+    .boot span { animation: bootpulse 0.8s ease-in-out infinite alternate; }
+    @keyframes bootpulse { from { opacity: .3; } to { opacity: 1; } }
+  </style>
+
+  <!-- ES modules from esm.sh — all libraries share ONE copy of React -->
+  <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.3.1",
+        "react/": "https://esm.sh/react@18.3.1/",
+        "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
+        "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
+        "framer-motion": "https://esm.sh/framer-motion@11.18.2?external=react,react-dom",
+        "lucide-react": "https://esm.sh/lucide-react@0.460.0?external=react",
+        "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.57.4"
+      }
+    }
+  </script>
+
+  <!-- Babel compiles the JSX below directly in the browser -->
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.28.4/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"><div class="boot" aria-hidden="true"><span>30</span></div></div>
+
+  <noscript>
+    <p style="color:#fff;font-family:sans-serif;text-align:center;padding:4rem 1.5rem">
+      Bitte JavaScript aktivieren, um die Einladung zu öffnen.
+    </p>
+  </noscript>
+
+  <script type="text/babel" data-type="module" data-presets="react">
+/**
+ * Leopold wird 30 — Après-Ski Edition & Pub Quiz
+ * "90s Après-Ski Trash meets Hüttengaudi"
+ * Single-file version: React · Tailwind CSS · Framer Motion · Supabase · lucide-react via CDN.
+ *
+ * ── Supabase SQL (run once in the SQL editor) ────────────────────────────────
+ *   create table if not exists public.rsvps (
+ *     id          uuid primary key default gen_random_uuid(),
+ *     guest_name  text not null,
+ *     status      text not null check (status in ('confirmed', 'declined')),
+ *     created_at  timestamptz not null default now()
+ *   );
+ *
+ *   alter table public.rsvps enable row level security;
+ *
+ *   create policy "Guests can submit RSVPs"
+ *     on public.rsvps for insert to anon
+ *     with check (status in ('confirmed', 'declined'));
+ *
+ *   -- Deliberately no SELECT policy: guests can write, but nobody can read the
+ *   -- guest list with the public anon key. Latest answer per guest (dashboard):
+ *   --   select distinct on (guest_name) guest_name, status, created_at
+ *   --   from public.rsvps order by guest_name, created_at desc;
+ */
+
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createRoot } from 'react-dom/client';
+import {
+  AnimatePresence,
+  MotionConfig,
+  motion,
+  useAnimationControls,
+  useInView,
+  useReducedMotion,
+} from 'framer-motion';
+import { createClient } from '@supabase/supabase-js';
+import {
+  ArrowRight,
+  CalendarPlus,
+  Check,
+  Copy,
+  Dices,
+  Download,
+  Flame,
+  Loader2,
+  MapPin,
+  ThermometerSnowflake,
+  X,
+} from 'lucide-react';
+
+/* ───────────────────────────── Supabase client ───────────────────────────── */
+
+// Publishable (public) key — safe in the browser as long as RLS only allows inserts.
+const SUPABASE_URL = 'https://eouhnvputjmjmqfoinjj.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_hLcy5p1kuVoOYAfRYpp__g_Jow7G7nw';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function saveRsvp(guestName, status) {
+  const { error } = await supabase
+    .from('rsvps')
+    .insert({ guest_name: guestName, status });
+  if (error) throw error;
+}
+
+/* ──────────────────────────────── Config ─────────────────────────────────── */
+
+const GUESTS = [
+  'lyn', 'poldi', 'freddy', 'victoria', 'matteo', 'tamara', 'luka', 'nici',
+  'matilda', 'emirhan', 'hanna', 'tobi', 'niklas', 'max', 'christin', 'eyk',
+  'luis', 'denise', 'cornelius', 'alina', 'leonie', 'corinna', 'alex',
+  'marlies', 'enna', 'ralf', 'birgit',
+];
+
+const MAPS_URL = 'https://maps.app.goo.gl/ALpBfsoryntMojt27';
+const IBAN = 'DE44 6905 0001 0020 1306 21';
+/* ─────────────────────────────── Calendar ────────────────────────────────── */
+
+// Berlin is on CET (UTC+1) in December:
+// 12 Dec 2026, 18:00 local = 17:00 UTC  ·  13 Dec 2026, 03:00 local = 02:00 UTC
+const EVENT = {
+  title: 'Le Club des Alpes — L’Anniversaire de Leopold',
+  startUtc: '20261212T170000Z',
+  endUtc: '20261213T020000Z',
+  location: 'TC Kluftern, Ganghoferstraße 9, 88048 Friedrichshafen',
+  description: 'Après Ski Edition. Dresscode: Alpine Elegance.',
+};
+
+const icsEscape = (text) =>
+  text.replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+
+// RFC 5545: lines longer than 75 bytes are folded with CRLF + one space.
+function icsFold(line) {
+  const bytes = new TextEncoder();
+  const parts = [];
+  let current = '';
+  for (const char of line) {
+    const limit = parts.length === 0 ? 75 : 74;
+    if (bytes.encode(current + char).length > limit) {
+      parts.push(current);
+      current = char;
+    } else {
+      current += char;
+    }
+  }
+  parts.push(current);
+  return parts.join('\r\n ');
+}
+
+function buildIcs() {
+  const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Le Club des Alpes//Invitation//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    'UID:le-club-des-alpes-vol30-20261212@club-des-alpes',
+    `DTSTAMP:${stamp}`,
+    `DTSTART:${EVENT.startUtc}`,
+    `DTEND:${EVENT.endUtc}`,
+    `SUMMARY:${icsEscape(EVENT.title)}`,
+    `LOCATION:${icsEscape(EVENT.location)}`,
+    `DESCRIPTION:${icsEscape(EVENT.description)}`,
+    `URL:${MAPS_URL}`,
+    'BEGIN:VALARM',
+    'ACTION:DISPLAY',
+    `DESCRIPTION:${icsEscape(EVENT.title)}`,
+    'TRIGGER:-P1D',
+    'END:VALARM',
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ]
+    .map(icsFold)
+    .join('\r\n');
+}
+
+const GOOGLE_CALENDAR_URL =
+  'https://calendar.google.com/calendar/render?' +
+  new URLSearchParams({
+    action: 'TEMPLATE',
+    text: EVENT.title,
+    dates: `${EVENT.startUtc}/${EVENT.endUtc}`,
+    ctz: 'Europe/Berlin',
+    location: EVENT.location,
+    details: EVENT.description,
+  }).toString();
+
+// Blob download — Apple Calendar, Outlook, iOS Safari (13+) and Android all accept it.
+function downloadIcs() {
+  const ics = buildIcs();
+  const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'le-club-des-alpes-anniversaire-leopold.ics';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/* ──────────────────────────────── Helpers ────────────────────────────────── */
+
+const MIN_LOADING_MS = 1200; // spinner stays long enough that the save feels real
+const RSVP_STORAGE_KEY = 'leo30-rsvp';
+const INTRO_STORAGE_KEY = 'leo30-intro-seen';
+
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const toDisplayName = (key) => key.charAt(0).toUpperCase() + key.slice(1);
+const pick = (list) => list[Math.floor(Math.random() * list.length)];
+
+// Browser storage can be blocked (private mode, in-app browsers) — never let that break the page.
+const storage = {
+  get(key) {
+    try { return window.localStorage.getItem(key); } catch { return null; }
+  },
+  set(key, value) {
+    try { window.localStorage.setItem(key, value); } catch { /* ignore */ }
+  },
+  remove(key) {
+    try { window.localStorage.removeItem(key); } catch { /* ignore */ }
+  },
+  sessionGet(key) {
+    try { return window.sessionStorage.getItem(key); } catch { return null; }
+  },
+  sessionSet(key, value) {
+    try { window.sessionStorage.setItem(key, value); } catch { /* ignore */ }
+  },
+};
+
+const formatSavedAt = (iso) =>
+  new Date(iso).toLocaleString('de-DE', {
+    day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
+  }) + ' Uhr';
+
+/* ─────────────────────────────── Atmosphere ──────────────────────────────── */
+
+function Backdrop() {
+  return (
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0">
+      <div
+        className="absolute inset-0"
+        style={{
+          background: [
+            'radial-gradient(circle at 12% 8%, rgba(255,43,214,.38), transparent 42%)',
+            'radial-gradient(circle at 90% 28%, rgba(0,240,255,.28), transparent 45%)',
+            'radial-gradient(circle at 30% 75%, rgba(229,255,0,.12), transparent 45%)',
+            'radial-gradient(circle at 85% 95%, rgba(255,43,214,.25), transparent 40%)',
+            '#0d0221',
+          ].join(','),
+        }}
+      />
+      {/* 90s ski-jacket zigzag */}
+      <div
+        className="absolute inset-0 opacity-[0.07]"
+        style={{
+          backgroundImage:
+            'linear-gradient(135deg, #fff 25%, transparent 25%), linear-gradient(225deg, #fff 25%, transparent 25%)',
+          backgroundSize: '48px 48px',
+          backgroundPosition: '0 0, 24px 0',
+        }}
+      />
+    </div>
+  );
+}
+
+function Snow() {
+  const flakes = useMemo(
+    () =>
+      Array.from({ length: 48 }, () => ({
+        left: Math.random() * 100,
+        size: 2 + Math.random() * 4,
+        duration: 9 + Math.random() * 12,
+        delay: -Math.random() * 20,
+        drift: Math.round(Math.random() * 60 - 30),
+        opacity: 0.25 + Math.random() * 0.55,
+      })),
+    []
+  );
+
+  return (
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
+      {flakes.map((f, i) => (
+        <span
+          key={i}
+          className="flake"
+          style={{
+            left: `${f.left}%`,
+            width: f.size,
+            height: f.size,
+            opacity: f.opacity,
+            animationDuration: `${f.duration}s`,
+            animationDelay: `${f.delay}s`,
+            '--drift': `${f.drift}px`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+/* ─────────────────────── Easter Egg 1: Die 30er-Eskalation ───────────────── */
+
+function Intro({ onDone }) {
+  const [count, setCount] = useState(1);
+  const [landed, setLanded] = useState(false);
+  const shake = useAnimationControls();
+
+  // 1 → 29 at full speed, braking hard over the last few numbers, then 30.
+  useEffect(() => {
+    let n = 1;
+    let timer;
+    const tick = () => {
+      n += 1;
+      setCount(n);
+      if (n >= 30) {
+        setLanded(true);
+        return;
+      }
+      const delay = n < 22 ? 38 : 38 + (n - 21) * 26;
+      timer = setTimeout(tick, delay);
+    };
+    timer = setTimeout(tick, 350);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!landed) return undefined;
+    try { navigator.vibrate?.([60, 40, 120]); } catch { /* not supported */ }
+    shake.start({
+      x: [0, -28, 24, -18, 14, -8, 4, 0],
+      y: [0, 14, -12, 8, -6, 3, 0],
+      rotate: [0, -2, 2, -1, 1, 0],
+      transition: { duration: 0.6, ease: 'easeOut' },
+    });
+    const timer = setTimeout(onDone, 1700);
+    return () => clearTimeout(timer);
+  }, [landed, onDone, shake]);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex cursor-pointer flex-col items-center justify-center overflow-hidden bg-[#0d0221]"
+      onClick={onDone}
+      exit={{ opacity: 0, scale: 1.4, filter: 'blur(12px)', transition: { duration: 0.5 } }}
+      role="presentation"
+    >
+      <Backdrop />
+      <AnimatePresence>
+        {landed && (
+          <motion.div
+            key="flash"
+            className="absolute inset-0 bg-white"
+            initial={{ opacity: 0.95 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: 0.45 }}
+          />
+        )}
+      </AnimatePresence>
+
+      <motion.div animate={shake} className="relative flex flex-col items-center">
+        <span
+          className={`font-display leading-none tabular-nums ${landed ? 'neon-pink' : 'text-white/90'}`}
+          style={{ fontSize: 'min(62vw, 60vh)' }}
+          aria-live="off"
+        >
+          {count}
+        </span>
+        <AnimatePresence>
+          {landed && (
+            <motion.p
+              className="font-display -mt-2 text-center text-2xl text-[var(--yellow)] sm:text-4xl"
+              initial={{ opacity: 0, scale: 2.4, rotate: -8 }}
+              animate={{ opacity: 1, scale: 1, rotate: -4 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 14 }}
+            >
+              LEOPOLD WIRD 30!
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      <button
+        type="button"
+        onClick={onDone}
+        className="font-body absolute bottom-[calc(env(safe-area-inset-bottom)+1.5rem)] min-h-12 px-4 text-xs uppercase tracking-[0.3em] text-white/50"
+      >
+        Überspringen
+      </button>
+    </motion.div>
+  );
+}
+
+/* ──────────────────────────────── Layout bits ────────────────────────────── */
+
+function Marquee() {
+  const text = '★ LEOPOLD WIRD 30 ★ APRÈS-SKI EDITION ★ PUB QUIZ ★ FEUERSCHALE ★ 12.12.2026 ★ TC KLUFTERN ';
+  return (
+    <div
+      className="relative z-20 overflow-hidden border-y-[3px] border-black bg-[var(--yellow)] py-2 text-black"
+      style={{ paddingTop: 'calc(env(safe-area-inset-top) + 0.5rem)' }}
+      aria-hidden="true"
+    >
+      <div className="marquee flex w-max whitespace-nowrap font-display text-sm">
+        <span>{text.repeat(3)}</span>
+        <span>{text.repeat(3)}</span>
+      </div>
+    </div>
+  );
+}
+
+function SectionTitle({ kicker, children, color = 'var(--cyan)' }) {
+  return (
+    <div className="mb-5">
+      {kicker && (
+        <p className="font-pixel mb-3 text-[10px] leading-relaxed" style={{ color }}>
+          {kicker}
+        </p>
+      )}
+      <h2 className="font-display text-3xl leading-[1.05] text-white sm:text-4xl">{children}</h2>
+    </div>
+  );
+}
+
+function Pop({ children, className = '', delay = 0, rotate = 0 }) {
+  return (
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y: 40, scale: 0.94, rotate: rotate - 3 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, rotate }}
+      viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+      transition={{ type: 'spring', stiffness: 260, damping: 20, delay }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ────────────────────────────────── Hero ─────────────────────────────────── */
+
+function Hero() {
+  return (
+    <header className="relative px-5 pb-6 pt-10 text-center">
+      <motion.div
+        className="chunky font-display absolute right-3 top-6 z-10 rotate-12 rounded-full bg-[var(--cyan)] px-3 py-2 text-[11px] leading-tight text-black"
+        initial={{ scale: 0, rotate: -40 }}
+        animate={{ scale: 1, rotate: 12 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 12, delay: 0.6 }}
+      >
+        JAHRGANG
+        <br />
+        ’96
+      </motion.div>
+
+      <motion.p
+        className="font-pixel text-left text-[10px] leading-relaxed text-[var(--cyan)]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        EINLADUNG // P1 READY
+      </motion.p>
+
+      <motion.h1
+        className="font-display mt-5 leading-[0.9]"
+        initial={{ opacity: 0, scale: 0.6 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 16 }}
+      >
+        <span className="neon-cyan flicker block text-[clamp(3.2rem,17vw,6.5rem)]">LEOPOLD</span>
+        <span className="neon-pink mt-1 block text-[clamp(2.6rem,13vw,5.2rem)]">WIRD 30!</span>
+      </motion.h1>
+
+      <motion.p
+        className="chunky font-display mx-auto mt-7 inline-block -rotate-2 bg-[var(--pink)] px-4 py-2 text-lg text-white sm:text-xl"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.35, type: 'spring', stiffness: 300, damping: 18 }}
+      >
+        Après-Ski Edition &amp; Pub Quiz
+      </motion.p>
+    </header>
+  );
+}
+
+/* ─────────────────────────────── Core facts ──────────────────────────────── */
+
+function FactCard({ label, title, children, accent, rotate }) {
+  return (
+    <Pop rotate={rotate}>
+      <div className="chunky bg-[#1a0838] p-5" style={{ borderColor: '#000' }}>
+        <p
+          className="font-pixel inline-block px-2 py-1 text-[10px] text-black"
+          style={{ background: accent }}
+        >
+          {label}
+        </p>
+        <p className="font-display mt-3 text-[1.7rem] leading-tight text-white">{title}</p>
+        <div className="font-body mt-1 text-lg font-medium text-white/85">{children}</div>
+      </div>
+    </Pop>
+  );
+}
+
+function Facts() {
+  return (
+    <section className="space-y-5 px-5 py-6" aria-label="Die wichtigsten Infos">
+      <FactCard label="WAS" title="Leopolds 30. Geburtstag" accent="var(--pink)" rotate={-1}>
+        Après-Ski Edition &amp; Pub Quiz
+      </FactCard>
+
+      <FactCard label="WANN" title="Sa, 12. Dezember 2026" accent="var(--cyan)" rotate={1}>
+        ab <span className="font-display text-[var(--yellow)]">18:00 Uhr</span> — Ende offen
+      </FactCard>
+
+      <FactCard label="WO" title="TC Kluftern" accent="var(--yellow)" rotate={-0.5}>
+        Ganghoferstraße 9, Friedrichshafen
+        <a
+          href={MAPS_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="chunky font-display mt-4 flex min-h-12 items-center justify-center gap-2 bg-[var(--yellow)] px-4 text-sm text-black"
+        >
+          <MapPin className="h-4 w-4" strokeWidth={2.5} />
+          Route öffnen
+        </a>
+      </FactCard>
+
+      <Pop>
+        <blockquote className="relative mt-4 border-l-[6px] border-[var(--pink)] py-2 pl-4">
+          <p className="font-marker text-2xl leading-snug text-white">
+            „Wir essen, wir saufen, es gibt ein Pub Quiz und draußen brennt die Feuerschale.“
+          </p>
+          <Flame className="mt-2 h-7 w-7 text-orange-400" strokeWidth={2.2} aria-hidden="true" />
+        </blockquote>
+      </Pop>
+
+      <Pop>
+        <div className="tape chunky p-2" role="note">
+          <div className="bg-black px-4 py-5 text-center">
+            <ThermometerSnowflake className="mx-auto h-9 w-9 text-[var(--cyan)]" strokeWidth={2} aria-hidden="true" />
+            <p className="font-display mt-2 text-2xl leading-tight text-[var(--yellow)]">
+              Es ist KALT im Tennisclub.
+            </p>
+            <p className="font-body mt-2 text-lg font-bold text-white">
+              Bitte zieht euch warm an!
+            </p>
+            <p className="font-body mt-1 text-base text-white/85">
+              Alpine Elegance ja, aber frieren nein.
+            </p>
+          </div>
+        </div>
+      </Pop>
+    </section>
+  );
+}
+
+/* ─────────────────────── Easter Egg 5: Die Polaroids ─────────────────────── */
+
+function Polaroid({ src, caption, rotate, className = '' }) {
+  const [broken, setBroken] = useState(false);
+  return (
+    <motion.figure
+      className={`relative w-[46%] max-w-[210px] bg-[#fdfdf8] p-2.5 pb-3 shadow-[0_18px_40px_rgba(0,0,0,.55)] ${className}`}
+      initial={{ rotate, y: 30, opacity: 0 }}
+      whileInView={{ rotate, y: 0, opacity: 1 }}
+      viewport={{ once: true }}
+      whileHover={{ rotate: 0, scale: 1.08, zIndex: 20 }}
+      whileTap={{ rotate: 0, scale: 1.08, zIndex: 20 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+      style={{ zIndex: 1 }}
+    >
+      <span
+        aria-hidden="true"
+        className="absolute -top-3 left-1/2 h-6 w-16 -translate-x-1/2 rotate-[-4deg] bg-[var(--cyan)]/60"
+      />
+      <div className="aspect-square overflow-hidden bg-zinc-800">
+        {broken ? (
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[var(--pink)] via-[#6b21a8] to-[var(--cyan)] p-3 text-center">
+            <span className="font-pixel text-[9px] leading-relaxed text-white">FOTO FOLGT</span>
+          </div>
+        ) : (
+          <img
+            src={src}
+            alt={caption}
+            loading="lazy"
+            onError={() => setBroken(true)}
+            className="h-full w-full object-cover"
+          />
+        )}
+      </div>
+      <figcaption className="font-marker mt-2 text-center text-[15px] leading-tight text-zinc-800">
+        {caption}
+      </figcaption>
+    </motion.figure>
+  );
+}
+
+function PolaroidPair({ items }) {
+  return (
+    <div className="relative flex justify-center gap-3 px-5 py-10">
+      {items.map((item, i) => (
+        <Polaroid key={item.src} {...item} className={i === 1 ? 'mt-8' : ''} />
+      ))}
+    </div>
+  );
+}
+
+/* ───────────────── Easter Egg 2: Das Frost-Rubbellos (Verpflegung) ───────── */
+
+function FrostScratch() {
+  const wrapRef = useRef(null);
+  const canvasRef = useRef(null);
+  const drawing = useRef(false);
+  const last = useRef(null);
+  const strokes = useRef(0);
+  const touched = useRef(false);
+  const [revealed, setRevealed] = useState(false);
+
+  const paintFrost = useCallback(() => {
+    const canvas = canvasRef.current;
+    const wrap = wrapRef.current;
+    if (!canvas || !wrap) return;
+    const { width, height } = wrap.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+
+    const ice = ctx.createLinearGradient(0, 0, width, height);
+    ice.addColorStop(0, '#dbe6f0');
+    ice.addColorStop(0.45, '#a9bccf');
+    ice.addColorStop(1, '#e8f0f7');
+    ctx.fillStyle = ice;
+    ctx.fillRect(0, 0, width, height);
+
+    for (let i = 0; i < 700; i += 1) {
+      ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.6})`;
+      ctx.fillRect(Math.random() * width, Math.random() * height, 1.6, 1.6);
+    }
+    ctx.strokeStyle = 'rgba(255,255,255,.55)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 9; i += 1) {
+      let x = Math.random() * width;
+      let y = Math.random() * height;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      for (let j = 0; j < 5; j += 1) {
+        x += Math.random() * 60 - 30;
+        y += Math.random() * 40 - 20;
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+
+    ctx.fillStyle = '#334155';
+    ctx.textAlign = 'center';
+    ctx.font = `${Math.min(22, width / 14)}px Bungee, 'Arial Black', sans-serif`;
+    ctx.fillText('❄ HIER RUBBELN ❄', width / 2, height / 2 - 4);
+    ctx.font = "600 13px 'Space Grotesk', sans-serif";
+    ctx.fillText('mit Finger oder Maus übers Eis', width / 2, height / 2 + 20);
+  }, []);
+
+  useEffect(() => {
+    paintFrost();
+    // Repaint once the fonts are in, unless someone already started scratching.
+    document.fonts?.ready?.then(() => {
+      if (!touched.current) paintFrost();
+    });
+    const onResize = () => {
+      if (!touched.current) paintFrost();
+    };
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [paintFrost]);
+
+  const checkProgress = () => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    let clear = 0;
+    let total = 0;
+    for (let i = 3; i < data.length; i += 4 * 24) {
+      total += 1;
+      if (data[i] === 0) clear += 1;
+    }
+    if (clear / total > 0.5) setRevealed(true);
+  };
+
+  const scratchAt = (event) => {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    const ctx = canvas.getContext('2d');
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.lineWidth = 42;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(last.current?.x ?? x, last.current?.y ?? y);
+    ctx.lineTo(x + 0.01, y);
+    ctx.stroke();
+    last.current = { x, y };
+    touched.current = true;
+    strokes.current += 1;
+    if (strokes.current % 10 === 0) checkProgress();
+  };
+
+  return (
+    <section className="px-5 py-8">
+      <SectionTitle kicker="RUBBELLOS · VERPFLEGUNG" color="var(--yellow)">
+        Was gibt’s zu futtern?
+      </SectionTitle>
+
+      <div ref={wrapRef} className="chunky relative min-h-44 overflow-hidden bg-[var(--pink)]">
+        <div className="flex min-h-44 flex-col items-center justify-center gap-3 p-6 text-center">
+          <p className="font-display text-xl leading-snug text-white">
+            Keine Sorge: Es gibt genug zu essen, noch mehr zu saufen und draußen brennt die
+            Feuerschale!
+          </p>
+          <p className="text-3xl" aria-hidden="true">🍖 🍻 🔥</p>
+        </div>
+
+        <motion.canvas
+          ref={canvasRef}
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full cursor-crosshair touch-none"
+          animate={{ opacity: revealed ? 0 : 1 }}
+          transition={{ duration: 0.6 }}
+          style={{ pointerEvents: revealed ? 'none' : 'auto' }}
+          onPointerDown={(e) => {
+            drawing.current = true;
+            e.currentTarget.setPointerCapture?.(e.pointerId);
+            scratchAt(e);
+          }}
+          onPointerMove={(e) => {
+            // Mouse scratches on hover; finger and pen scratch while pressed.
+            if (e.pointerType === 'mouse' || drawing.current) scratchAt(e);
+          }}
+          onPointerUp={() => {
+            drawing.current = false;
+            last.current = null;
+            checkProgress();
+          }}
+          onPointerLeave={() => {
+            drawing.current = false;
+            last.current = null;
+          }}
+        />
+      </div>
+
+      {!revealed && (
+        <button
+          type="button"
+          onClick={() => setRevealed(true)}
+          className="font-body mt-3 min-h-12 text-sm text-white/60 underline underline-offset-4"
+        >
+          Keine Lust zu rubbeln? Direkt aufdecken
+        </button>
+      )}
+    </section>
+  );
+}
+
+/* ───────────────── Easter Egg 3: Der Outfit-Generator (Slot Machine) ─────── */
+
+const REELS = [
+  ['Neon-Skianzug', 'Retro-Anorak', 'Pinke Daunenjacke', 'Onesie von ’94', 'Norweger-Pulli', 'Fleece-Overall'],
+  ['Moonboots', 'Après-Ski-Stiefel', 'Thermo-Leggings', 'Kniestrümpfe', 'Schneestiefel', 'Skischuhe (mutig)'],
+  ['Wollmütze', 'Stirnband in Neon', 'Skibrille auf Stirn', 'Bommelmütze', 'Ohrenwärmer', 'Neon-Sonnenbrille'],
+];
+
+function Reel({ items, index, spinning }) {
+  return (
+    <div className="chunky relative flex h-24 flex-1 items-center justify-center overflow-hidden bg-white px-1.5">
+      {spinning ? (
+        <motion.span
+          key="spin"
+          className="font-body block text-center text-[13px] font-bold leading-tight tracking-tight text-black/70 blur-[1.5px]"
+          animate={{ y: [-14, 14] }}
+          transition={{ duration: 0.07, repeat: Infinity, repeatType: 'mirror', ease: 'linear' }}
+        >
+          {items[index]}
+        </motion.span>
+      ) : (
+        <motion.span
+          key={`stop-${index}`}
+          className="font-body block hyphens-auto break-words text-center text-[13px] font-bold leading-tight tracking-tight text-black"
+          initial={{ y: -30, scale: 1.2 }}
+          animate={{ y: 0, scale: 1 }}
+          transition={{ type: 'spring', stiffness: 600, damping: 12 }}
+        >
+          {items[index]}
+        </motion.span>
+      )}
+      <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-5 bg-gradient-to-b from-black/25 to-transparent" />
+      <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-5 bg-gradient-to-t from-black/25 to-transparent" />
+    </div>
+  );
+}
+
+function OutfitSlot() {
+  const [indexes, setIndexes] = useState([0, 0, 0]);
+  const [spinning, setSpinning] = useState([false, false, false]);
+  const [spun, setSpun] = useState(false);
+  const timers = useRef([]);
+  const busy = spinning.some(Boolean);
+
+  useEffect(() => () => timers.current.forEach(clearInterval), []);
+
+  const spin = () => {
+    if (busy) return;
+    setSpun(true);
+    setSpinning([true, true, true]);
+    REELS.forEach((items, reel) => {
+      const interval = setInterval(() => {
+        setIndexes((prev) => {
+          const next = [...prev];
+          next[reel] = (next[reel] + 1) % items.length;
+          return next;
+        });
+      }, 70);
+      timers.current.push(interval);
+      const stop = setTimeout(() => {
+        clearInterval(interval);
+        setIndexes((prev) => {
+          const next = [...prev];
+          next[reel] = Math.floor(Math.random() * items.length);
+          return next;
+        });
+        setSpinning((prev) => {
+          const next = [...prev];
+          next[reel] = false;
+          return next;
+        });
+      }, 900 + reel * 500);
+      timers.current.push(stop);
+    });
+  };
+
+  return (
+    <section className="px-5 py-8">
+      <SectionTitle kicker="DRESSCODE · ALPINE ELEGANCE" color="var(--pink)">
+        Was zieh ich an?
+      </SectionTitle>
+
+      <div className="chunky bg-[#1a0838] p-4">
+        <div className="flex gap-2" aria-live="polite">
+          {REELS.map((items, reel) => (
+            <Reel key={reel} items={items} index={indexes[reel]} spinning={spinning[reel]} />
+          ))}
+        </div>
+        <p className="sr-only" aria-live="polite">
+          {spun && !busy ? `Dein Outfit: ${REELS.map((r, i) => r[indexes[i]]).join(', ')}` : ''}
+        </p>
+
+        <button
+          type="button"
+          onClick={spin}
+          disabled={busy}
+          className="chunky font-display mt-4 flex min-h-14 w-full items-center justify-center gap-3 bg-[var(--cyan)] px-4 text-lg text-black disabled:opacity-80"
+        >
+          <Dices className={`h-6 w-6 ${busy ? 'animate-spin' : ''}`} strokeWidth={2.2} />
+          {busy ? 'Rattert…' : spun ? 'Nochmal drehen!' : 'Dresscode Inspo'}
+        </button>
+      </div>
+
+      <p className="alarm chunky font-display mt-5 px-4 py-3 text-center text-base leading-snug" role="note">
+        ⚠ ACHTUNG: Arschkalt im Clubheim – zieht euch warm an! ⚠
+      </p>
+    </section>
+  );
+}
+
+/* ────────────────── Easter Egg 6: Pub-Quiz Sneak Peek (Modal) ────────────── */
+
+const QUIZ = {
+  question: 'Was ist Leopolds Signature-Move auf der Piste?',
+  answers: [
+    { id: 'a', text: 'Der elegante Pizza-Stopp', reply: 'Solide Technik. Aber nein – so elegant ist er nicht.' },
+    { id: 'b', text: 'Direkt zur Schirmbar abbiegen', reply: 'Fast! Er biegt schon an der Talstation ab.' },
+    { id: 'c', text: 'Der unfreiwillige Salto', reply: 'Die Zeugen schweigen. Kein Kommentar.' },
+    { id: 'd', text: 'Alles davon in einer Abfahrt', reply: 'JACKPOT! Genau so war’s. 🏆' },
+  ],
+};
+
+function PubQuiz() {
+  const [open, setOpen] = useState(false);
+  const [choice, setChoice] = useState(null);
+  const closeRef = useRef(null);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKey = (e) => e.key === 'Escape' && setOpen(false);
+    document.addEventListener('keydown', onKey);
+    const { overflow } = document.body.style;
+    document.body.style.overflow = 'hidden';
+    closeRef.current?.focus();
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = overflow;
+    };
+  }, [open]);
+
+  const picked = QUIZ.answers.find((a) => a.id === choice);
+
+  return (
+    <section className="px-5 py-8 text-center">
+      <SectionTitle kicker="PUB QUIZ · SNEAK PEEK" color="var(--yellow)">
+        Bist du quizfit?
+      </SectionTitle>
+
+      <motion.button
+        type="button"
+        onClick={() => {
+          setChoice(null);
+          setOpen(true);
+        }}
+        whileHover={{ rotate: -2, scale: 1.03 }}
+        className="chunky font-display mx-auto flex min-h-16 w-full items-center justify-center gap-3 bg-[var(--yellow)] px-5 text-xl text-black"
+        style={{ boxShadow: '8px 8px 0 #000, 8px 8px 0 3px var(--pink)' }}
+      >
+        🍺 Testfrage aufdecken
+      </motion.button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-end justify-center bg-black/75 p-4 backdrop-blur-sm sm:items-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setOpen(false)}
+          >
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="quiz-title"
+              className="chunky relative w-full max-w-md bg-[#1a0838] p-5 pt-6 text-left"
+              style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 1.25rem)' }}
+              initial={{ y: 80, scale: 0.9, rotate: -3 }}
+              animate={{ y: 0, scale: 1, rotate: 0 }}
+              exit={{ y: 80, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 380, damping: 24 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                ref={closeRef}
+                type="button"
+                onClick={() => setOpen(false)}
+                aria-label="Schließen"
+                className="absolute right-2 top-2 flex h-12 w-12 items-center justify-center text-white/70"
+              >
+                <X className="h-6 w-6" />
+              </button>
+
+              <p className="font-pixel text-[10px] text-[var(--cyan)]">FRAGE 1 / ???</p>
+              <h3 id="quiz-title" className="font-display mt-3 pr-8 text-2xl leading-tight text-white">
+                {QUIZ.question}
+              </h3>
+
+              <div className="mt-5 grid gap-3">
+                {QUIZ.answers.map((a) => {
+                  const active = choice === a.id;
+                  return (
+                    <motion.button
+                      key={a.id}
+                      type="button"
+                      onClick={() => setChoice(a.id)}
+                      whileTap={{ scale: 0.97 }}
+                      className={`chunky font-body flex min-h-12 items-center gap-3 px-4 py-3 text-left text-base font-bold ${
+                        active ? 'bg-[var(--pink)] text-white' : 'bg-white text-black'
+                      }`}
+                    >
+                      <span className="font-display text-sm uppercase">{a.id})</span>
+                      {a.text}
+                    </motion.button>
+                  );
+                })}
+              </div>
+
+              <div className="min-h-20" aria-live="polite">
+                <AnimatePresence mode="wait">
+                  {picked && (
+                    <motion.div
+                      key={picked.id}
+                      initial={{ opacity: 0, scale: 0.8, rotate: -4 }}
+                      animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 18 }}
+                      className="mt-5"
+                    >
+                      <p className="font-display text-lg leading-snug text-[var(--yellow)]">{picked.reply}</p>
+                      <p className="font-body mt-2 text-sm text-white/70">
+                        Die echten Fragen gibt’s am 12.12. – und die werden härter.
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
+  );
+}
+
+/* ───────────── Easter Egg 7: Holographischer Skipass + Bestätigung ──────── */
+
+function SkiPass({ name }) {
+  return (
+    <motion.div
+      className="relative mx-auto w-full max-w-sm"
+      initial={{ rotateY: 90, scale: 0.7 }}
+      animate={{ rotateY: 0, scale: 1 }}
+      transition={{ type: 'spring', stiffness: 160, damping: 14, delay: 0.25 }}
+      style={{ perspective: 800 }}
+    >
+      <motion.div
+        className="chunky relative overflow-hidden rounded-2xl bg-gradient-to-br from-[var(--cyan)] via-white to-[var(--pink)] p-5 text-black"
+        animate={{ y: [0, -6, 0], rotate: [-1.5, 1, -1.5] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <div aria-hidden="true" className="holo pointer-events-none absolute inset-0" />
+        <div className="relative">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="font-pixel text-[9px]">SKIPASS · SAISON 26/27</p>
+              <p className="font-display mt-2 text-[1.9rem] leading-none">{name}</p>
+            </div>
+            <span className="chunky font-display shrink-0 rotate-6 bg-black px-2 py-1 text-sm text-[var(--yellow)]">
+              VIP
+            </span>
+          </div>
+
+          <dl className="font-body mt-4 grid grid-cols-2 gap-x-3 gap-y-2 text-[13px] font-bold">
+            <div>
+              <dt className="font-pixel text-[8px] opacity-70">GÜLTIG</dt>
+              <dd>12.12.2026 ab 18:00</dd>
+            </div>
+            <div>
+              <dt className="font-pixel text-[8px] opacity-70">ZONE</dt>
+              <dd>TC Kluftern</dd>
+            </div>
+            <div>
+              <dt className="font-pixel text-[8px] opacity-70">TARIF</dt>
+              <dd>Leo 30 · All-Inclusive</dd>
+            </div>
+            <div>
+              <dt className="font-pixel text-[8px] opacity-70">STATUS</dt>
+              <dd className="flex items-center gap-1">
+                <Check className="h-4 w-4" strokeWidth={3} /> Zugesagt
+              </dd>
+            </div>
+          </dl>
+
+          <div className="mt-4 flex items-end justify-between gap-3">
+            <div aria-hidden="true" className="barcode h-10 flex-1" />
+            <p className="font-pixel text-[8px]">No. 030</p>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function CalendarButtons() {
+  return (
+    <div className="grid gap-3">
+      <a
+        href={GOOGLE_CALENDAR_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="chunky font-display flex min-h-14 items-center justify-center gap-3 bg-white px-4 text-base text-black"
+      >
+        <CalendarPlus className="h-5 w-5 shrink-0" strokeWidth={2.2} />
+        Google Calendar
+      </a>
+      <button
+        type="button"
+        onClick={downloadIcs}
+        className="chunky font-display flex min-h-14 items-center justify-center gap-3 bg-[var(--cyan)] px-4 text-base text-black"
+      >
+        <Download className="h-5 w-5 shrink-0" strokeWidth={2.2} />
+        Apple / Outlook (.ics)
+      </button>
+    </div>
+  );
+}
+
+function Confirmed({ name, savedAt, onChange }) {
+  return (
+    <motion.div
+      key="confirmed"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      className="space-y-7"
+    >
+      <div className="rainbow-border p-[5px]" role="status" aria-live="assertive">
+        <div className="bg-black px-5 py-6 text-center">
+          <p className="bam font-display text-[2.1rem] leading-none">BÄM!</p>
+          <p className="font-display mt-3 flex items-center justify-center gap-2 text-2xl leading-tight text-white">
+            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#22c55e] text-black">
+              <Check className="h-6 w-6" strokeWidth={4} />
+            </span>
+            Zusage ist gespeichert!
+          </p>
+          <p className="font-body mt-4 text-lg font-bold leading-snug text-white">
+            Leopold hat die Info in seiner Datenbank.
+          </p>
+          <p className="font-body mt-2 text-lg font-bold leading-snug text-[var(--yellow)]">
+            Du musst ihm NICHT nochmal auf WhatsApp schreiben.
+          </p>
+          <p className="font-body mt-2 text-lg font-bold leading-snug text-white">
+            Lad dir jetzt den Termin in den Kalender! 👇
+          </p>
+          <p className="font-body mt-4 text-xs text-white/60">
+            Gespeichert für <strong className="text-white">{name}</strong>
+            {savedAt ? ` am ${formatSavedAt(savedAt)}` : ''}
+          </p>
+        </div>
+      </div>
+
+      <SkiPass name={name} />
+
+      <CalendarButtons />
+
+      <button
+        type="button"
+        onClick={onChange}
+        className="font-body mx-auto block min-h-12 text-sm text-white/50 underline underline-offset-4"
+      >
+        Doch nicht? Antwort ändern
+      </button>
+    </motion.div>
+  );
+}
+
+function Declined({ name, onChange }) {
+  return (
+    <motion.div
+      key="declined"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="chunky bg-[#1a0838] px-5 py-7 text-center"
+      role="status"
+    >
+      <p className="text-5xl" aria-hidden="true">🥲</p>
+      <p className="font-display mt-3 text-2xl leading-tight text-white">Absage ist gespeichert.</p>
+      <p className="font-body mt-3 text-lg font-bold text-white">
+        Schade, {name}! Leopold weiß Bescheid – du musst ihm nicht extra schreiben.
+      </p>
+      <button
+        type="button"
+        onClick={onChange}
+        className="font-body mt-4 min-h-12 text-sm text-white/60 underline underline-offset-4"
+      >
+        Kann doch? Antwort ändern
+      </button>
+    </motion.div>
+  );
+}
+
+/* ───────────── RSVP + Easter Egg 4: Der Skifahrer-Angriff ─────────────────── */
+
+function Skier({ onDone }) {
+  return (
+    <motion.span
+      aria-hidden="true"
+      className="pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-4xl"
+      initial={{ left: '104%' }}
+      animate={{ left: '-16%', y: [0, -8, 0, -5, 0, -8, 0] }}
+      transition={{ left: { duration: 1.5, ease: 'linear' }, y: { duration: 1.5 } }}
+      onAnimationComplete={onDone}
+      style={{ filter: 'drop-shadow(18px 0 0 rgba(255,255,255,.35)) drop-shadow(0 0 8px #00f0ff)' }}
+    >
+      ⛷️
+    </motion.span>
+  );
+}
+
+function readStoredRsvp() {
+  const raw = storage.get(RSVP_STORAGE_KEY);
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw);
+    return parsed && parsed.name && parsed.status ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function Rsvp({ onPhaseChange }) {
+  const stored = useMemo(readStoredRsvp, []);
+  // idle → confirming → confirmed   |   idle → declining → declined
+  const [phase, setPhase] = useState(stored ? stored.status : 'idle');
+  const [value, setValue] = useState('');
+  const [guest, setGuest] = useState(stored?.name ?? '');
+  const [savedAt, setSavedAt] = useState(stored?.at ?? null);
+  const [error, setError] = useState('');
+  const [skiers, setSkiers] = useState([]);
+  const lastSkier = useRef(0);
+  const shake = useAnimationControls();
+  const busy = phase === 'confirming' || phase === 'declining';
+
+  useEffect(() => {
+    onPhaseChange?.(phase);
+  }, [phase, onPhaseChange]);
+
+  const handleType = (event) => {
+    setValue(event.target.value);
+    if (error) setError('');
+    const now = Date.now();
+    if (now - lastSkier.current > 2200 && Math.random() < 0.4) {
+      lastSkier.current = now;
+      setSkiers((list) => [...list, now]);
+    }
+  };
+
+  const respond = async (status) => {
+    if (busy) return;
+    const key = value.trim().toLowerCase();
+    if (!GUESTS.includes(key)) {
+      setError(
+        key
+          ? 'Den Namen haben wir nicht auf der Liste. Tipp deinen Vornamen so, wie Leopold dich nennt.'
+          : 'Erst deinen Vornamen eintippen!'
+      );
+      shake.start({ x: [0, -12, 10, -6, 4, 0], transition: { duration: 0.45 } });
+      return;
+    }
+
+    const name = toDisplayName(key);
+    setError('');
+    setPhase(status === 'confirmed' ? 'confirming' : 'declining');
+    try {
+      await Promise.all([saveRsvp(name, status), wait(MIN_LOADING_MS)]);
+      const at = new Date().toISOString();
+      storage.set(RSVP_STORAGE_KEY, JSON.stringify({ name, status, at }));
+      setGuest(name);
+      setSavedAt(at);
+      setPhase(status);
+    } catch (err) {
+      console.error('[RSVP]', err);
+      setPhase('idle');
+      setError(
+        'Mist, die Verbindung hat gezickt – deine Antwort ist NICHT gespeichert. Bitte nochmal drücken.'
+      );
+    }
+  };
+
+  const reset = () => {
+    storage.remove(RSVP_STORAGE_KEY);
+    setValue(guest);
+    setPhase('idle');
+  };
+
+  return (
+    <section id="rsvp" className="scroll-mt-6 px-5 py-10">
+      <SectionTitle kicker="RSVP · EIN KLICK REICHT" color="var(--cyan)">
+        Bist du dabei?
+      </SectionTitle>
+
+      <AnimatePresence mode="wait" initial={false}>
+        {phase === 'confirmed' ? (
+          <Confirmed key="confirmed" name={guest} savedAt={savedAt} onChange={reset} />
+        ) : phase === 'declined' ? (
+          <Declined key="declined" name={guest} onChange={reset} />
+        ) : (
+          <motion.form
+            key="form"
+            className="chunky bg-[#1a0838] p-5"
+            exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.25 } }}
+            onSubmit={(e) => {
+              e.preventDefault();
+              respond('confirmed');
+            }}
+            noValidate
+          >
+            <label htmlFor="guest-name" className="font-pixel block text-[10px] leading-relaxed text-white/80">
+              DEIN VORNAME
+            </label>
+
+            <motion.div animate={shake} className="relative mt-3 overflow-hidden">
+              <input
+                id="guest-name"
+                name="guest-name"
+                type="text"
+                value={value}
+                onChange={handleType}
+                disabled={busy}
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="words"
+                spellCheck={false}
+                enterKeyHint="send"
+                placeholder="z. B. Cornelius"
+                aria-invalid={Boolean(error)}
+                aria-describedby={error ? 'rsvp-error' : undefined}
+                className="font-display block h-16 w-full rounded-none border-[3px] border-black bg-white px-4 text-2xl text-black outline-none placeholder:text-black/25 focus:border-[var(--pink)] focus:shadow-[0_0_0_4px_var(--pink)]"
+              />
+              <AnimatePresence>
+                {skiers.map((id) => (
+                  <Skier key={id} onDone={() => setSkiers((list) => list.filter((s) => s !== id))} />
+                ))}
+              </AnimatePresence>
+            </motion.div>
+
+            <div aria-live="polite">
+              {error && (
+                <p
+                  id="rsvp-error"
+                  role="alert"
+                  className="font-body mt-3 bg-[var(--pink)] px-3 py-2 text-sm font-bold text-white"
+                >
+                  {error}
+                </p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={busy}
+              aria-busy={phase === 'confirming'}
+              className="chunky font-display mt-5 flex min-h-16 w-full items-center justify-center gap-3 bg-[var(--pink)] px-4 text-xl text-white disabled:cursor-wait"
+            >
+              {phase === 'confirming' ? (
+                <>
+                  <Loader2 className="h-6 w-6 animate-spin" strokeWidth={2.5} />
+                  Speichere…
+                </>
+              ) : (
+                <>ICH BIN DABEI! 🎉</>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => respond('declined')}
+              disabled={busy}
+              className="font-body mx-auto mt-3 flex min-h-12 items-center gap-2 px-4 text-sm text-white/65 underline underline-offset-4 disabled:opacity-50"
+            >
+              {phase === 'declining' ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" /> Speichere Absage…
+                </>
+              ) : (
+                'Kann leider nicht 😢'
+              )}
+            </button>
+          </motion.form>
+        )}
+      </AnimatePresence>
+    </section>
+  );
+}
+
+/* ───────────────────────────── Floating RSVP CTA ─────────────────────────── */
+
+function FloatingCta({ hidden }) {
+  return (
+    <AnimatePresence>
+      {!hidden && (
+        <motion.a
+          href="#rsvp"
+          className="chunky font-display fixed z-40 flex min-h-12 items-center gap-2 bg-[var(--yellow)] px-4 text-sm text-black"
+          style={{
+            right: '1rem',
+            bottom: 'calc(env(safe-area-inset-bottom) + 1rem)',
+          }}
+          initial={{ y: 120, rotate: 8 }}
+          animate={{ y: 0, rotate: -3 }}
+          exit={{ y: 120 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+        >
+          Jetzt zusagen <ArrowRight className="h-4 w-4" strokeWidth={3} />
+        </motion.a>
+      )}
+    </AnimatePresence>
+  );
+}
+
+/* ──────────────────────────────── Geschenke ──────────────────────────────── */
+
+function CopyIban() {
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!copied) return undefined;
+    const timer = setTimeout(() => setCopied(false), 2200);
+    return () => clearTimeout(timer);
+  }, [copied]);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(IBAN.replace(/\s/g, ''));
+      setCopied(true);
+    } catch {
+      // Clipboard unavailable (e.g. in-app browser) — the IBAN stays selectable.
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={copy}
+      className="chunky font-body mt-3 flex min-h-12 w-full items-center justify-between gap-3 bg-white px-3 py-2 text-left text-black"
+    >
+      <span className="select-text text-[15px] font-bold tabular-nums">{IBAN}</span>
+      {copied ? (
+        <Check className="h-5 w-5 shrink-0 text-green-600" strokeWidth={3} />
+      ) : (
+        <Copy className="h-5 w-5 shrink-0" strokeWidth={2.2} />
+      )}
+      <span className="sr-only" aria-live="polite">{copied ? 'IBAN kopiert' : ''}</span>
+    </button>
+  );
+}
+
+function Gifts() {
+  return (
+    <section className="px-5 py-8">
+      <SectionTitle kicker="GESCHENKE?" color="var(--pink)">
+        Nur wenn du magst
+      </SectionTitle>
+      <div className="chunky bg-[#1a0838] p-5">
+        <p className="font-body text-base text-white/90">
+          Dass du kommst, ist Geschenk genug. Wer trotzdem was geben will: eine Spende an den
+          Tennisclub, der uns die Hütte leiht.
+        </p>
+        <p className="font-display mt-4 text-lg text-white">TC Kluftern</p>
+        <CopyIban />
+        <p className="font-body mt-3 text-sm text-white/80">Verwendungszweck: Spende</p>
+        <p className="font-body mt-1 text-xs text-white/55">
+          (Steuerlich absetzbar in deiner Steuererklärung 2026.)
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* ──────────────────────────────── Footer ─────────────────────────────────── */
+
+/** In-app browsers (Instagram, WhatsApp…) can misbehave. On iOS 17+ the
+ *  x-safari- scheme hands the current URL straight to Safari. */
+function Footer() {
+  const { href, isIOS } = useMemo(() => {
+    const url = window.location.href;
+    const ios =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    return { href: ios ? `x-safari-${url}` : url, isIOS: ios };
+  }, []);
+
+  return (
+    <footer
+      className="px-6 pb-24 pt-6 text-center"
+      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 6rem)' }}
+    >
+      <p className="font-pixel text-[9px] leading-relaxed text-white/40">GAME OVER? NEVER. · 1996 – 2026</p>
+      <a
+        href={href}
+        {...(!isIOS && { target: '_blank', rel: 'noopener noreferrer' })}
+        className="font-body mt-2 inline-flex min-h-12 items-center text-xs text-white/50 underline underline-offset-4"
+      >
+        Probleme? Hier tippen, um die Seite in Safari zu öffnen.
+      </a>
+    </footer>
+  );
+}
+
+/* ───────────────────────────────── App ───────────────────────────────────── */
+
+const POLAROIDS_TOP = [
+  { src: './leo-1.jpg', caption: 'Beweisfoto #1', rotate: -7 },
+  { src: './leo-2.jpg', caption: 'Pistensau, ca. 1999', rotate: 6 },
+];
+const POLAROIDS_BOTTOM = [
+  { src: './leo-3.jpg', caption: 'Après-Ski-Profi', rotate: 5 },
+  { src: './leo-4.jpg', caption: 'Bald: 30 & fabelhaft', rotate: -6 },
+];
+
+function App() {
+  const reduceMotion = useReducedMotion();
+  const [showIntro, setShowIntro] = useState(
+    () => !reduceMotion && storage.sessionGet(INTRO_STORAGE_KEY) !== '1'
+  );
+
+  const endIntro = useCallback(() => {
+    storage.sessionSet(INTRO_STORAGE_KEY, '1');
+    setShowIntro(false);
+  }, []);
+
+  return (
+    <MotionConfig reducedMotion="user">
+      <div className="font-body relative min-h-[100dvh] overflow-x-clip bg-[#0d0221] text-white antialiased selection:bg-[var(--pink)] selection:text-white">
+        <Backdrop />
+        <Snow />
+
+        <AnimatePresence>{showIntro && <Intro key="intro" onDone={endIntro} />}</AnimatePresence>
+
+        {!showIntro && <Page />}
+      </div>
+    </MotionConfig>
+  );
+}
+
+// Mounted only after the intro, so the in-view observer attaches to a real element.
+function Page() {
+  const rsvpRef = useRef(null);
+  const rsvpInView = useInView(rsvpRef);
+  const [rsvpPhase, setRsvpPhase] = useState('idle');
+  const answered = rsvpPhase === 'confirmed' || rsvpPhase === 'declined';
+
+  return (
+          <motion.div
+            className="relative z-10"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Marquee />
+            <main className="mx-auto w-full max-w-lg">
+              <Hero />
+              <Facts />
+              <PolaroidPair items={POLAROIDS_TOP} />
+              <FrostScratch />
+              <OutfitSlot />
+              <PolaroidPair items={POLAROIDS_BOTTOM} />
+              <PubQuiz />
+              <div ref={rsvpRef}>
+                <Rsvp onPhaseChange={setRsvpPhase} />
+              </div>
+              <Gifts />
+              <Footer />
+            </main>
+            <FloatingCta hidden={answered || rsvpInView} />
+          </motion.div>
+  );
+}
+
+/* ──────────────────────────────── Mount ──────────────────────────────────── */
+
+createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
